@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 154605766}
   - component: {fileID: 154605765}
   - component: {fileID: 154605767}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground_Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -992,7 +992,7 @@ TilemapCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_UsedByComposite: 1
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
@@ -1290,7 +1290,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1872548384}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -1435,7 +1435,7 @@ Transform:
   m_GameObject: {fileID: 1872548384}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.33, y: -4.29, z: 0}
+  m_LocalPosition: {x: 3.19, y: -4.29, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1453,7 +1453,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06259c53c7868cd43bcd0e6ec15086d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 10
+  speed: 10
+  speedJump: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  groundCollider: {fileID: 0}
+  gravity: 0
+  isGrounded: 0
+  maxSlopeAngle: 60
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
