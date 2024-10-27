@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 153750860}
   - component: {fileID: 153750862}
   - component: {fileID: 153750861}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MovementPlatform4OnXTemp4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 438532713}
   - component: {fileID: 438532715}
   - component: {fileID: 438532714}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MovementPlatform3OnXTemp3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7333,7 +7333,7 @@ GameObject:
   - component: {fileID: 763096782}
   - component: {fileID: 763096784}
   - component: {fileID: 763096783}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MovementPlatform2OnXTemp2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7585,7 +7585,7 @@ GameObject:
   - component: {fileID: 947447652}
   - component: {fileID: 947447654}
   - component: {fileID: 947447653}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: MovementPlatformOn1XTemp1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7840,7 +7840,7 @@ GameObject:
   - component: {fileID: 965294596}
   - component: {fileID: 965294598}
   - component: {fileID: 965294597}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: MovementPlatform2OnX2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8104,6 +8104,73 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &1162494434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1162494435}
+  - component: {fileID: 1162494436}
+  m_Layer: 0
+  m_Name: ColliderCheckGround
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1162494435
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162494434}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: 0.70710707, w: 0.70710653}
+  m_LocalPosition: {x: -0.19199991, y: -0.585, z: 0.001452446}
+  m_LocalScale: {x: 0.55, y: 0.75, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1188176923}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!70 &1162494436
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162494434}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 1}
+  m_Direction: 0
 --- !u!1 &1183128196
 GameObject:
   m_ObjectHideFlags: 0
@@ -8115,7 +8182,7 @@ GameObject:
   - component: {fileID: 1183128197}
   - component: {fileID: 1183128199}
   - component: {fileID: 1183128198}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MovementPlatform5OnXTemp5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8356,6 +8423,41 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1188176922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1188176923}
+  m_Layer: 0
+  m_Name: ColliderChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1188176923
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188176922}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.2006669, y: 0.1701259, z: -9.895999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1162494435}
+  - {fileID: 1905320322}
+  - {fileID: 1441455673}
+  - {fileID: 1736306199}
+  m_Father: {fileID: 1872548389}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1203053376
 GameObject:
   m_ObjectHideFlags: 0
@@ -8370,7 +8472,7 @@ GameObject:
   - component: {fileID: 1203053380}
   - component: {fileID: 1203053382}
   - component: {fileID: 1203053381}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: MovementPlatform5OnX5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8634,6 +8736,73 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &1441455671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1441455673}
+  - component: {fileID: 1441455672}
+  m_Layer: 0
+  m_Name: RightWallChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!70 &1441455672
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441455671}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 1}
+  m_Direction: 0
+--- !u!4 &1441455673
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441455671}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.122, y: -0.169, z: 0.001452446}
+  m_LocalScale: {x: 0.9, y: 0.8625, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1188176923}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1501942672
 GameObject:
   m_ObjectHideFlags: 0
@@ -10699,7 +10868,7 @@ GameObject:
   - component: {fileID: 1532179890}
   - component: {fileID: 1532179892}
   - component: {fileID: 1532179891}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: MovementPlatform1OnX1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10963,6 +11132,73 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &1736306198
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1736306199}
+  - component: {fileID: 1736306200}
+  m_Layer: 0
+  m_Name: AboveChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1736306199
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736306198}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071066, w: 0.70710695}
+  m_LocalPosition: {x: -0.206, y: 0.179, z: 0.001452446}
+  m_LocalScale: {x: 0.7375, y: 0.8625, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1188176923}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!70 &1736306200
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736306198}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 1}
+  m_Direction: 0
 --- !u!1 &1872548384
 GameObject:
   m_ObjectHideFlags: 0
@@ -10977,8 +11213,9 @@ GameObject:
   - component: {fileID: 1872548386}
   - component: {fileID: 1872548385}
   - component: {fileID: 1872548390}
+  - component: {fileID: 1872548391}
   m_Layer: 8
-  m_Name: Circle
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11007,7 +11244,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -11210,6 +11447,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 519420032}
+  - {fileID: 1188176923}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1872548390
@@ -11219,7 +11457,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1872548384}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 06259c53c7868cd43bcd0e6ec15086d9, type: 3}
   m_Name: 
@@ -11231,6 +11469,100 @@ MonoBehaviour:
     m_Bits: 8
   groundCheck: {fileID: 1872548389}
   groundCheckRadius: 0.5
+--- !u!114 &1872548391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872548384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17e0674b9c3ed3449a1fd6f87210070a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpSpeed: 10
+  speed: 10
+  gravity: 1
+  isGrounded: 0
+  isAbove: 0
+  isLeftWall: 0
+  isRightWall: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  groundCollider: {fileID: 1162494436}
+  aboveCollider: {fileID: 1736306200}
+  leftWallCollider: {fileID: 1905320323}
+  rightWallCollider: {fileID: 1441455672}
+  maxSlopeAngle: 60
+--- !u!1 &1905320321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1905320322}
+  - component: {fileID: 1905320323}
+  m_Layer: 0
+  m_Name: LeftWallChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1905320322
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1905320321}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.5473187, y: -0.176, z: 0.001452446}
+  m_LocalScale: {x: 0.8, y: 0.875, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1188176923}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &1905320323
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1905320321}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 1}
+  m_Direction: 0
 --- !u!1 &1956384581
 GameObject:
   m_ObjectHideFlags: 0
@@ -11245,7 +11577,7 @@ GameObject:
   - component: {fileID: 1956384585}
   - component: {fileID: 1956384587}
   - component: {fileID: 1956384586}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: MovementPlatform4OnX4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11523,7 +11855,7 @@ GameObject:
   - component: {fileID: 1961030995}
   - component: {fileID: 1961030997}
   - component: {fileID: 1961030996}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: MovementPlatform3OnX3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
