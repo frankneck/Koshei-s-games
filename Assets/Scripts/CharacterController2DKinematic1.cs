@@ -63,7 +63,7 @@ public class CharacterController2DKinematic : MonoBehaviour
     private void FixedUpdate()
     {
         GroundCheck();
-        SlopeCheck();
+        // SlopeCheck();
         LeftWallCheck();
         RightWallCheck();
         AboveCheck();
