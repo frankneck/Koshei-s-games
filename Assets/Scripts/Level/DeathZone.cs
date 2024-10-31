@@ -31,7 +31,7 @@ public class DeathZone : MonoBehaviour
     {
         while (Quaternion.Angle(targetObject.rotation, targetRotation) > 0.1f)
         {
-            targetObject.rotation = Quaternion.Lerp(targetObject.rotation, targetRotation, Time.deltaTime * 2f);
+            targetObject.rotation = Quaternion.Lerp(targetObject.rotation, targetRotation, Time.deltaTime * 4f);
             yield return null;
         }
 
@@ -39,6 +39,8 @@ public class DeathZone : MonoBehaviour
         {
             lastPostion = player.transform.position;
             newPosition.x = lastPostion.x;
+            if (lastPostion.z == -12f)
+                newPosition.z = lastPostion.z - 1f;
             player.transform.position = newPosition;
         }
 

@@ -85,10 +85,6 @@ public class CharacterController2DKinematic : MonoBehaviour
         }
         isJump = false;
 
-        if (isAbove && gravityVelocity.y > 0)
-        {
-            gravityVelocity.y = 0;
-        }
 
         if (movement.normalized == Vector2.right)
         {
@@ -120,7 +116,6 @@ public class CharacterController2DKinematic : MonoBehaviour
         isGrounded = count > 0;
     }
 
-
     private void WallCheck()
     {
         Vector2[] directions = { Vector2.up, Vector2.right, Vector2.left };
@@ -131,7 +126,7 @@ public class CharacterController2DKinematic : MonoBehaviour
 
             if (count > 0)
             {
-                if (movement.y == Vector2.up.y && direction == Vector2.up && gravityVelocity.y > 0)
+                if (direction == Vector2.up && gravityVelocity.y > 0)
                 {
                     gravityVelocity.y = 0;
                 }
