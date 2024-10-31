@@ -22,9 +22,9 @@ public class CharacterController2DKinematic : MonoBehaviour
     [SerializeField] private bool isRightWall;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private CapsuleCollider2D groundCollider;
-    //[SerializeField] private CapsuleCollider2D aboveCollider;
-    //[SerializeField] private CapsuleCollider2D leftWallCollider;
-    //[SerializeField] private CapsuleCollider2D rightWallCollider;
+    [SerializeField] private CapsuleCollider2D aboveCollider;
+    [SerializeField] private CapsuleCollider2D leftWallCollider;
+    [SerializeField] private CapsuleCollider2D rightWallCollider;
     [SerializeField] private float maxSlopeAngle = 60f;
 
     private Rigidbody2D body;
@@ -50,24 +50,32 @@ public class CharacterController2DKinematic : MonoBehaviour
     }
 
     public void OnJump()
-    { 
+    {
         isJump = true;
-        Debug.Log("Space performed");
     }
 
     public void OnMove(InputValue value)
     {
         movement = value.Get<Vector2>();
- 
+
     }
 
     private void FixedUpdate()
     {
         GroundCheck();
         // SlopeCheck();
-        WallCheck();
-        //RightWallCheck();
-        //AboveCheck();
+        LeftWallCheck();
+        RightWallCheck();
+        AboveCheck();
+
+        if (movement.x == Vector2.right.x)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+        else if (movement.x == Vector2.left.x)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
 
 
         if (!isGrounded)
@@ -81,31 +89,38 @@ public class CharacterController2DKinematic : MonoBehaviour
 
         if (isJump && isGrounded)
         {
-           gravityVelocity += jumpSpeed * Vector2.up;
+            gravityVelocity += jumpSpeed * Vector2.up;
         }
         isJump = false;
 
-
-        if (movement.normalized == Vector2.right)
+        if (isAbove && gravityVelocity.y > 0)
         {
-            GetComponent<SpriteRenderer>().flipX = false;
+            gravityVelocity.y = 0;
         }
 
-        if (movement.normalized == Vector2.left)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-        }
+        var movementDirection = movement;
 
+        if (movementDirection.normalized == Vector2.right)
+            if (isRightWall)
+                movementDirection.x = 0;
+            else
+                movementDirection = movementDirection;
 
-        if (Mathf.Abs(this.movement.x) > 0.1f)
+        if (movementDirection.normalized == Vector2.left)
+            if (isLeftWall)
+                movementDirection.x = 0;
+            else
+                movementDirection = movementDirection;
+
+        if (Mathf.Abs(movement.x) > 0.1f)
         {
             if (slopeNormal.HasValue)
             {
-                this.movement = -Mathf.Sign(this.movement.x) * Vector2.Perpendicular(slopeNormal.Value).normalized;
+                movement = -Mathf.Sign(movement.x) * Vector2.Perpendicular(slopeNormal.Value).normalized;
             }
         }
-        Debug.DrawLine(body.position, body.position + movement, Color.red, 0.1f);
-        var deltaPos = movement * speed * Time.fixedDeltaTime;
+        Debug.DrawLine(body.position, body.position + movementDirection, Color.red, 0.1f);
+        var deltaPos = movementDirection * speed * Time.fixedDeltaTime;
         var deltaGravity = gravityVelocity * Time.fixedDeltaTime;
         body.MovePosition(body.position + deltaPos + deltaGravity);
     }
@@ -116,38 +131,23 @@ public class CharacterController2DKinematic : MonoBehaviour
         isGrounded = count > 0;
     }
 
-    private void WallCheck()
+
+    private void LeftWallCheck()
     {
-        Vector2[] directions = { Vector2.up, Vector2.right, Vector2.left };
+        var countL = leftWallCollider.OverlapCollider(groundFilter, collides);
+        isLeftWall = countL > 0;
+    }
 
-        foreach (var direction in directions)
-        {
-            var count = GetComponent<Collider2D>().Cast(direction, groundFilter, raycasts, 0.1f);
+    private void RightWallCheck()
+    {
+        var countR = rightWallCollider.OverlapCollider(groundFilter, collides);
+        isRightWall = countR > 0;
+    }
 
-            if (count > 0)
-            {
-                if (direction == Vector2.up && gravityVelocity.y > 0)
-                {
-                    gravityVelocity.y = 0;
-                }
-                else
-                    movement = movement;
-                
-                if (movement.normalized == Vector2.right && direction == Vector2.right)
-                {
-                    movement *= 0;
-                }
-                else
-                    movement = movement;
-                
-                if (movement.normalized == Vector2.left && direction == Vector2.left)
-                {
-                    movement *= 0;
-                }
-                else
-                    movement = movement;
-            }
-        }
+    private void AboveCheck()
+    {
+        var count = aboveCollider.OverlapCollider(groundFilter, collides);
+        isAbove = count > 0;
     }
 
     private void SlopeCheck()
@@ -156,7 +156,7 @@ public class CharacterController2DKinematic : MonoBehaviour
         Vector2? normal = null;
         Vector2[] directions = { Vector2.down, Vector2.right, Vector2.left };
         foreach (var direction in directions)
-        {   
+        {
             var count = groundCollider.Cast(direction, groundFilter, raycasts, 0.1f);
             for (int i = 0; i < count; i++)
             {
