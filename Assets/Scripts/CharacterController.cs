@@ -22,9 +22,9 @@ public class CharacterController2DKinematic : MonoBehaviour
     [SerializeField] private bool isRightWall;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private CapsuleCollider2D groundCollider;
-    [SerializeField] private CapsuleCollider2D aboveCollider;
-    [SerializeField] private CapsuleCollider2D leftWallCollider;
-    [SerializeField] private CapsuleCollider2D rightWallCollider;
+    //[SerializeField] private CapsuleCollider2D aboveCollider;
+    //[SerializeField] private CapsuleCollider2D leftWallCollider;
+    //[SerializeField] private CapsuleCollider2D rightWallCollider;
     [SerializeField] private float maxSlopeAngle = 60f;
 
     private Rigidbody2D body;
@@ -52,6 +52,7 @@ public class CharacterController2DKinematic : MonoBehaviour
     public void OnJump()
     { 
         isJump = true;
+        Debug.Log("Space performed");
     }
 
     public void OnMove(InputValue value)
@@ -64,9 +65,9 @@ public class CharacterController2DKinematic : MonoBehaviour
     {
         GroundCheck();
         // SlopeCheck();
-        LeftWallCheck();
-        RightWallCheck();
-        AboveCheck();
+        WallCheck();
+        //RightWallCheck();
+        //AboveCheck();
 
 
         if (!isGrounded)
@@ -89,29 +90,26 @@ public class CharacterController2DKinematic : MonoBehaviour
             gravityVelocity.y = 0;
         }
 
-        var movementDirection = movement;
+        if (movement.normalized == Vector2.right)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
 
-        if (movementDirection.normalized == Vector2.right)
-            if (isRightWall)
-                movementDirection *= 0;
-            else
-                movementDirection = movementDirection;
+        if (movement.normalized == Vector2.left)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
 
-        if (movementDirection.normalized == Vector2.left)
-            if (isLeftWall)
-                movementDirection *= 0;
-            else
-                movementDirection = movementDirection;
 
-        if (Mathf.Abs(movement.x) > 0.1f)
+        if (Mathf.Abs(this.movement.x) > 0.1f)
         {
             if (slopeNormal.HasValue)
             {
-                movement = -Mathf.Sign(movement.x) * Vector2.Perpendicular(slopeNormal.Value).normalized;
+                this.movement = -Mathf.Sign(this.movement.x) * Vector2.Perpendicular(slopeNormal.Value).normalized;
             }
         }
-        Debug.DrawLine(body.position, body.position + movementDirection, Color.red, 0.1f);
-        var deltaPos = movementDirection * speed * Time.fixedDeltaTime;
+        Debug.DrawLine(body.position, body.position + movement, Color.red, 0.1f);
+        var deltaPos = movement * speed * Time.fixedDeltaTime;
         var deltaGravity = gravityVelocity * Time.fixedDeltaTime;
         body.MovePosition(body.position + deltaPos + deltaGravity);
     }
@@ -123,22 +121,38 @@ public class CharacterController2DKinematic : MonoBehaviour
     }
 
 
-    private void LeftWallCheck()
+    private void WallCheck()
     {
-        var countL = leftWallCollider.OverlapCollider(groundFilter, collides);
-        isLeftWall = countL > 0;
-    }
+        Vector2[] directions = { Vector2.up, Vector2.right, Vector2.left };
 
-    private void RightWallCheck()
-    {
-        var countR = rightWallCollider.OverlapCollider(groundFilter, collides);
-        isRightWall = countR > 0;
-    }
+        foreach (var direction in directions)
+        {
+            var count = GetComponent<Collider2D>().Cast(direction, groundFilter, raycasts, 0.1f);
 
-    private void AboveCheck()
-    {
-        var count = aboveCollider.OverlapCollider(groundFilter, collides);
-        isAbove = count > 0;
+            if (count > 0)
+            {
+                if (movement.y == Vector2.up.y && direction == Vector2.up && gravityVelocity.y > 0)
+                {
+                    gravityVelocity.y = 0;
+                }
+                else
+                    movement = movement;
+                
+                if (movement.normalized == Vector2.right && direction == Vector2.right)
+                {
+                    movement *= 0;
+                }
+                else
+                    movement = movement;
+                
+                if (movement.normalized == Vector2.left && direction == Vector2.left)
+                {
+                    movement *= 0;
+                }
+                else
+                    movement = movement;
+            }
+        }
     }
 
     private void SlopeCheck()
