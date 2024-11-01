@@ -2,16 +2,18 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class DeathZone : MonoBehaviour
+public class Trigger : MonoBehaviour
 {
-    [SerializeField] private Transform targetObject;
-    [SerializeField] private Vector3 newPosition;
+    [SerializeField] private Transform targetObject; // cube
+    [SerializeField] private Vector3 newPosition; // new posis 
 
-    private bool shouldRotate;
-    private Quaternion targetRotation;
+    private Quaternion targetRotation; // к чему придем
+    private int rotate;
+
     private Vector3 lastPostion;
     private Player player;
-    private int rotate;
+   
+    Vector2[] directions = { Vector2.down, Vector2.right, Vector2.left };
 
     private void Start()
     {
@@ -19,7 +21,7 @@ public class DeathZone : MonoBehaviour
         UpdateTargetRotation();
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.TryGetComponent<Player>(out player))
         {
@@ -31,7 +33,7 @@ public class DeathZone : MonoBehaviour
     {
         while (Quaternion.Angle(targetObject.rotation, targetRotation) > 0.1f)
         {
-            targetObject.rotation = Quaternion.Lerp(targetObject.rotation, targetRotation, Time.deltaTime * 4f);
+            targetObject.rotation = Quaternion.RotateTowards(targetObject.rotation, targetRotation, Time.deltaTime * 4f);
             yield return null;
         }
 
