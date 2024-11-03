@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 220078592}
   - component: {fileID: 220078591}
   - component: {fileID: 220078593}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TriggerTwo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,9 +265,10 @@ MonoBehaviour:
   targetObject: {fileID: 1690668792}
   rotationSpeed: 100
   mainCamera: {fileID: 684834901}
-  targetSize: 12
-  zoomSpeed: 10
+  targetSize: 30
+  zoomSpeed: 15
   newPosition: {x: 0, y: 10.28, z: 0}
+  isDownTrigger: 0
 --- !u!212 &220078592
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -21735,6 +21736,7 @@ MonoBehaviour:
   targetSize: 12
   zoomSpeed: 2
   newPosition: {x: 0, y: 0, z: 0}
+  isDownTrigger: 0
 --- !u!212 &698253666
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -21884,6 +21886,7 @@ MonoBehaviour:
   targetSize: 12
   zoomSpeed: 2
   newPosition: {x: 0, y: 0, z: 0}
+  isDownTrigger: 0
 --- !u!212 &712558494
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -35187,7 +35190,7 @@ GameObject:
   - component: {fileID: 1150264473}
   - component: {fileID: 1150264472}
   - component: {fileID: 1150264474}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TriggerOne
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35224,9 +35227,10 @@ MonoBehaviour:
   targetObject: {fileID: 1690668792}
   rotationSpeed: 100
   mainCamera: {fileID: 684834901}
-  targetSize: 12
-  zoomSpeed: 10
+  targetSize: 30
+  zoomSpeed: 15
   newPosition: {x: 0, y: 10.28, z: 0}
+  isDownTrigger: 0
 --- !u!212 &1150264473
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -35421,6 +35425,7 @@ MonoBehaviour:
   targetSize: 12
   zoomSpeed: 2
   newPosition: {x: 0, y: 0, z: 0}
+  isDownTrigger: 0
 --- !u!212 &1192211206
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -35570,6 +35575,7 @@ MonoBehaviour:
   targetSize: 12
   zoomSpeed: 2
   newPosition: {x: 0, y: 0, z: 0}
+  isDownTrigger: 0
 --- !u!212 &1220005678
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -44558,6 +44564,7 @@ MonoBehaviour:
   targetSize: 12
   zoomSpeed: 2
   newPosition: {x: 0, y: 0, z: 0}
+  isDownTrigger: 0
 --- !u!212 &1735436098
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -44620,6 +44627,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1848574167}
   - component: {fileID: 1848574166}
+  - component: {fileID: 1848574168}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -44655,6 +44663,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1848574168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848574165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5e03d928eaa594e8a041a0ae4d8e6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cube: {fileID: 1690668791}
+  groundCollider: {fileID: 1611673042}
+  aboveCollider: {fileID: 1673386797}
+  leftWallCollider: {fileID: 1885478342}
+  rightWallCollider: {fileID: 578165602}
+  triggerLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  downTriggerOne: {fileID: 1150264470}
+  downTriggerTwo: {fileID: 220078589}
 --- !u!1 &1855320532
 GameObject:
   m_ObjectHideFlags: 0
@@ -44752,6 +44782,7 @@ MonoBehaviour:
   targetSize: 12
   zoomSpeed: 2
   newPosition: {x: 0, y: 0, z: 0}
+  isDownTrigger: 0
 --- !u!212 &1855320536
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -46963,7 +46994,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1690668792}
-  - {fileID: 1848574167}
   - {fileID: 1368347942}
   - {fileID: 974623322}
   - {fileID: 684834902}
+  - {fileID: 1848574167}

@@ -1,6 +1,7 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class DeathZone : MonoBehaviour
+public class DownTrigger : MonoBehaviour
 {
     [Header("Rotation cube")]
     [SerializeField] private Transform targetObject;
@@ -20,6 +21,7 @@ public class DeathZone : MonoBehaviour
     private bool shouldChangeCamera;
     private bool isZooming = false;
     private float initialSize;
+    public bool isDownTrigger = false;
 
     private void Start()
     {
@@ -31,6 +33,7 @@ public class DeathZone : MonoBehaviour
     {
         if (collision.TryGetComponent<Player>(out var collidedPlayer))
         {
+            isDownTrigger = true;
             shouldChangeCamera = true;
             player = collidedPlayer; // Сохраняем ссылку на игрока
             shouldRotate = true;
@@ -39,7 +42,7 @@ public class DeathZone : MonoBehaviour
             newPosition.z = player.transform.position.z;
 
 
-            CharacterOff();  // Отключаем персонажа и его коллизию, делаем кинематичным
+            CharacterOff(player);  // Отключаем персонажа и его коллизию, делаем кинематичным
 
             if (newPosition.z == -12f)
             {
@@ -60,6 +63,8 @@ public class DeathZone : MonoBehaviour
     {
         if (shouldRotate)
         {
+            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, new Vector3(0.89375f, -6.14f, -29.35f), Time.deltaTime * rotationSpeed);
+            Debug.Log("Ya gay!");
             mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetSize, Time.deltaTime * zoomSpeed);
 
             if (Mathf.Abs(mainCamera.orthographicSize - targetSize) < 0.01f)
@@ -94,7 +99,7 @@ public class DeathZone : MonoBehaviour
         }
     }
 
-    private void CharacterOff()
+    private void CharacterOff(Player player)
     {
         player.GetComponent<Rigidbody2D>().isKinematic = true;
         player.GetComponent<SpriteRenderer>().enabled = false;

@@ -21,10 +21,14 @@ public class CharacterController2DKinematic : MonoBehaviour
     [SerializeField] private bool isLeftWall;
     [SerializeField] private bool isRightWall;
     [SerializeField] private LayerMask groundLayer;
+
+    [Header("Character colliders")]
     [SerializeField] private CapsuleCollider2D groundCollider;
     [SerializeField] private CapsuleCollider2D aboveCollider;
     [SerializeField] private CapsuleCollider2D leftWallCollider;
     [SerializeField] private CapsuleCollider2D rightWallCollider;
+
+    [Header("Other")]
     [SerializeField] private float maxSlopeAngle = 60f;
 
     private Rigidbody2D body;
@@ -32,7 +36,6 @@ public class CharacterController2DKinematic : MonoBehaviour
     private Collider2D[] collides = new Collider2D[16];  // Буфер для хранения res коллизий
     private RaycastHit2D[] raycasts = new RaycastHit2D[16];
     private Vector2? slopeNormal;
-
     private Vector2 gravityVelocity;
     private Vector2 movement;
     private bool isJump;
