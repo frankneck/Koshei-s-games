@@ -263,11 +263,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 1690668792}
-  newPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 100
   mainCamera: {fileID: 684834901}
   targetSize: 12
   zoomSpeed: 10
+  newPosition: {x: 0, y: 10.28, z: 0}
 --- !u!212 &220078592
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -19945,10 +19945,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 974623322}
-  minX: -0.94
+  minX: -1
   minY: -6.02
   maxX: 2
-  maxY: 2
+  maxY: 5
 --- !u!1 &692552628
 GameObject:
   m_ObjectHideFlags: 0
@@ -21724,17 +21724,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 698253662}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aae7af9cc291ebc46b98f08c90db1cb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 1690668792}
-  newPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 45
   mainCamera: {fileID: 0}
   targetSize: 12
   zoomSpeed: 2
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!212 &698253666
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -21828,7 +21828,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 712558490}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -21873,17 +21873,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 712558490}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aae7af9cc291ebc46b98f08c90db1cb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 1690668792}
-  newPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 45
   mainCamera: {fileID: 0}
   targetSize: 12
   zoomSpeed: 2
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!212 &712558494
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -35167,8 +35167,8 @@ Transform:
   m_GameObject: {fileID: 1014416934}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -24.056}
-  m_LocalScale: {x: 1.13, y: 1, z: 1}
+  m_LocalPosition: {x: 1.0356927, y: 0, z: -24.056}
+  m_LocalScale: {x: -1.13, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1150264471}
@@ -35222,11 +35222,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 1690668792}
-  newPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 100
   mainCamera: {fileID: 684834901}
   targetSize: 12
   zoomSpeed: 10
+  newPosition: {x: 0, y: 10.28, z: 0}
 --- !u!212 &1150264473
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -35365,7 +35365,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1192211202}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -35416,11 +35416,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 1690668792}
-  newPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 45
   mainCamera: {fileID: 0}
   targetSize: 12
   zoomSpeed: 2
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!212 &1192211206
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -35559,17 +35559,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220005674}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aae7af9cc291ebc46b98f08c90db1cb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 1690668792}
-  newPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 45
   mainCamera: {fileID: 0}
   targetSize: 12
   zoomSpeed: 2
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!212 &1220005678
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -44502,7 +44502,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1735436094}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -44547,17 +44547,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1735436094}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aae7af9cc291ebc46b98f08c90db1cb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 1690668792}
-  newPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 45
   mainCamera: {fileID: 0}
   targetSize: 12
   zoomSpeed: 2
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!212 &1735436098
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -44696,7 +44696,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855320532}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -44747,11 +44747,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 1690668792}
-  newPosition: {x: 0, y: 0, z: 0}
   rotationSpeed: 45
   mainCamera: {fileID: 0}
   targetSize: 12
   zoomSpeed: 2
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!212 &1855320536
 SpriteRenderer:
   m_ObjectHideFlags: 0

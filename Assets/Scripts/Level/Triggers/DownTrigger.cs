@@ -27,7 +27,7 @@ public class DeathZone : MonoBehaviour
         initialSize = mainCamera.orthographicSize;
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.TryGetComponent<Player>(out var collidedPlayer))
         {
@@ -38,6 +38,8 @@ public class DeathZone : MonoBehaviour
             newPosition.x = player.transform.position.x;
             newPosition.z = player.transform.position.z;
 
+
+            CharacterOff();  // Отключаем персонажа и его коллизию, делаем кинематичным
 
             if (newPosition.z == -12f)
             {
@@ -75,7 +77,8 @@ public class DeathZone : MonoBehaviour
 
                 if (player != null)
                 {
-                    player.transform.position = newPosition;
+                    player.transform.position = newPosition;  // Даем персонажу новую позицию
+                    CharacterOn(player);
                 }
             }
         }
@@ -91,4 +94,17 @@ public class DeathZone : MonoBehaviour
         }
     }
 
+    private void CharacterOff()
+    {
+        player.GetComponent<Rigidbody2D>().isKinematic = true;
+        player.GetComponent<SpriteRenderer>().enabled = false;
+        player.GetComponent<Collider2D>().enabled = false;
+    }
+
+    private void CharacterOn(Player player)
+    {
+        player.GetComponent<Rigidbody2D>().isKinematic = false;
+        player.GetComponent<SpriteRenderer>().enabled = true;
+        player.GetComponent<Collider2D>().enabled = true;
+    }
 }
