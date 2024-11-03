@@ -57,7 +57,6 @@ public class CharacterController2DKinematic : MonoBehaviour
     public void OnMove(InputValue value)
     {
         movement = value.Get<Vector2>();
-
     }
 
     private void FixedUpdate()
