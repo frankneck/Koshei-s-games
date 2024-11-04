@@ -26,10 +26,6 @@ public partial class LevelHUD : MonoBehaviour
             // ѕолучим новую команду из очереди
             if (CommandQueue.TryDequeueCommand(out var command))
             {
-                switch (command)
-                {
-
-                }
             }
 
             // ќб€зательно нужно сказать, что мы закончили обновление 

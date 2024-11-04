@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -7,12 +5,6 @@ public class TileMapFinder : MonoBehaviour
 {
     [Header("Level")]
     [SerializeField] private GameObject cube;
-
-    [Header("Character colliders")]
-    [SerializeField] private CapsuleCollider2D groundCollider;
-    [SerializeField] private CapsuleCollider2D aboveCollider;
-    [SerializeField] private CapsuleCollider2D leftWallCollider;
-    [SerializeField] private CapsuleCollider2D rightWallCollider;
 
     [Header("Layer for triggers")]
     [SerializeField] private LayerMask triggerLayer;
@@ -26,9 +18,15 @@ public class TileMapFinder : MonoBehaviour
 
     private Tilemap[] sides;
     private Tilemap currentTilemap;
+    private Tilemap lastTilemap;
     private ContactFilter2D triggerFilter;
     private Collider2D[] collides = new Collider2D[16]; // Буфер для пересечений
     private int count; // Счетчик для пересечений
+
+    private bool shouldRotate;
+
+    private volatile bool downTrigger1;
+    private volatile bool downTrigger2;
 
     private void Awake()
     {
@@ -51,200 +49,226 @@ public class TileMapFinder : MonoBehaviour
 
         // Текущая тайлмап - А
         currentTilemap = sides[0];
-        var lastTilemap = currentTilemap;
+        lastTilemap = currentTilemap;
 
         // Отключение всех тайлмапов кроме A
         for (int i = 2; i < sides.Length; i++)
         {
             sides[i].GetComponent<Collider2D>().enabled = false;
         }
+
+
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
+        shouldRotate = downTriggerOne.GetComponent<DownTrigger>().shouldRotate;
+
+        downTrigger1 = downTriggerOne.GetComponent<DownTrigger>().isDownTrigger;
+        downTrigger2 = downTriggerTwo.GetComponent<DownTrigger>().isDownTrigger;
+
         DefineCurrentSide();
     }
 
     private void DefineCurrentSide()
     {
+        Debug.Log($"Текущая тайлмап: {currentTilemap.name}");
+        Debug.Log($"downTrigger1: {downTrigger1}, downTrigger2: {downTrigger2}");
+
         switch (System.Array.IndexOf(sides, currentTilemap))
         {
             case 0: // For A
-                if (downTriggerOne.GetComponent<DownTrigger>().isDownTrigger || downTriggerTwo.GetComponent<DownTrigger>().isDownTrigger)
+
+                if ((downTrigger1 || downTrigger2) && !shouldRotate)
                 {
-                    var lastTilemap = currentTilemap;
+                    Debug.Log("Нижний триггер A");
+                    lastTilemap = currentTilemap;
                     currentTilemap = sides[5]; // F
                     currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                
-                count = leftWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[4]; // E
+
+                    // Обнуление isDownTrigger
+                    downTrigger1 = false;
+                    downTrigger2 = false;
+                    
                     break;
                 }
 
-                count = rightWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[2]; // C
-                    break;
-                }
+                //    if ((downTrigger1 || downTrigger2) && !shouldRotate)
+                //    {
+                //        currentTilemap = sides[4]; // E
+                //        break;
+                //    }
 
-                count = aboveCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[1]; // B
-                    break;
-                }
+                //    count = rightWallCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[2]; // C
+                //        break;
+                //    }
+
+                //    count = aboveCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[1]; // B
+                //        break;
+                //    }
                 break;
 
-            case 1:     // For B
-                count = groundCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[0]; // A
-                    break;
-                }
+                //case 1:     // For B
+                //    count = groundCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[0]; // A
+                //        break;
+                //    }
 
-                count = leftWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[4]; // E
-                    break;
-                }
+                //    count = leftWallCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[4]; // E
+                //        break;
+                //    }
 
-                count = rightWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                { 
-                    currentTilemap = sides[2]; // C
-                    break;
-                }
+                //    count = rightWallCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    { 
+                //        currentTilemap = sides[2]; // C
+                //        break;
+                //    }
 
-                count = aboveCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[5]; // F
-                    break;
-                }
+                //    count = aboveCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[5]; // F
+                //        break;
+                //    }
                 break;
-            case 2:     // For C
-                count = groundCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[5]; // F
-                    break;
-                }
+                //case 2:     // For C
+                //    count = groundCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[5]; // F
+                //        break;
+                //    }
 
-                count = leftWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[0]; // A
-                    break;
-                }
+                //    count = leftWallCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[0]; // A
+                //        break;
+                //    }
 
-                count = rightWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[3]; // D
-                    break;
-                }
+                //    count = rightWallCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[3]; // D
+                //        break;
+                //    }
 
-                count = aboveCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[1]; // B
-                    break;
-                }
+                //    count = aboveCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[1]; // B
+                //        break;
+                //    }
                 break;
-            case 3:     // For D
-                count = groundCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[5]; // F
-                    break;
-                }
+                //case 3:     // For D
+                //    count = groundCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[5]; // F
+                //        break;
+                //    }
 
-                count = leftWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[2]; // C
-                    break;
-                }
+                //    count = leftWallCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[2]; // C
+                //        break;
+                //    }
 
-                count = rightWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[4]; // E
-                    break;
-                }
+                //    count = rightWallCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[4]; // E
+                //        break;
+                //    }
 
-                count = aboveCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[1]; // B
-                    break;
-                }
+                //    count = aboveCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[1]; // B
+                //        break;
+                //    }
                 break;
-            case 4:     // For E
-                count = groundCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[5]; // F
-                    break;
-                }
+                //case 4:     // For E
+                //    count = groundCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[5]; // F
+                //        break;
+                //    }
 
-                count = leftWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[3]; // D
-                    break;
-                }
+                //    count = leftWallCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[3]; // D
+                //        break;
+                //    }
 
-                count = rightWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[0]; // A
-                    break;
-                }
+                //    count = rightWallCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[0]; // A
+                //        break;
+                //    }
 
-                count = aboveCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[1]; // B
-                    break;
-                }
+                //    count = aboveCollider.OverlapCollider(triggerFilter, collides);
+                //    if (count > 0)
+                //    {
+                //        currentTilemap = sides[1]; // B
+                //        break;
+                //}
                 break;
             case 5:     // For F
-                count = groundCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
+                if ((downTrigger1 || downTrigger2) && !shouldRotate)
                 {
-                    currentTilemap = sides[1]; // B
-                    break;
-                }
+                    Debug.Log("Нижний триггер F");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[3]; // D
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
 
-                count = leftWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[4]; // E
+                    // Обнуление isDownTrigger
+                    downTrigger1 = false;
+                    downTrigger2 = false;
                     break;
                 }
+                else
+                    Debug.Log("Down Trigger false");
 
-                count = rightWallCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[2]; // C
-                    break;
-                }
 
-                count = aboveCollider.OverlapCollider(triggerFilter, collides);
-                if (count > 0)
-                {
-                    currentTilemap = sides[0]; // A
-                    break;
-                }
+                //count = leftWallCollider.OverlapCollider(triggerFilter, collides);
+                //if (count > 0)
+                //{
+                //    currentTilemap = sides[4]; // E
+                //    break;
+                //}
+
+                //count = rightWallCollider.OverlapCollider(triggerFilter, collides);
+                //if (count > 0)
+                //{
+                //    currentTilemap = sides[2]; // C
+                //    break;
+                //}
+
+                //count = aboveCollider.OverlapCollider(triggerFilter, collides);
+                //if (count > 0)
+                //{
+                //    currentTilemap = sides[0]; // A
+                //    break;
+                //}
                 break;
             
             default:
@@ -252,16 +276,3 @@ public class TileMapFinder : MonoBehaviour
         }
     }
 }
-
-
-/*
-Что имеем
-
-Два варианта 
-
-1) У меня есть триггер вниз (В самом тригере)
-2) Когда он срабатывает текущий тайлмап равен по условию
- 
-
-
- */

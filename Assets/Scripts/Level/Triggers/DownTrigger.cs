@@ -6,6 +6,7 @@ public class DownTrigger : MonoBehaviour
     [Header("Rotation cube")]
     [SerializeField] private Transform targetObject;
     [SerializeField] private float rotationSpeed = 45f;
+    private float rotate = 90f;
 
     [Header("Camera")]
     [SerializeField] private Camera mainCamera;
@@ -15,28 +16,35 @@ public class DownTrigger : MonoBehaviour
     [Header("SpawnCharacter")]
     [SerializeField] private Vector3 newPosition;
 
-    private bool shouldRotate = false;
+    public bool shouldRotate = false;
     private Quaternion targetRotation;
     private Player player;
-    private bool shouldChangeCamera;
     private bool isZooming = false;
     private float initialSize;
     public bool isDownTrigger = false;
 
+
     private void Start()
     {
-        targetRotation = Quaternion.Euler(90, 0, 0);
+        targetRotation = Quaternion.Euler(rotate, 0, 0);
         initialSize = mainCamera.orthographicSize;
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<Player>(out var collidedPlayer))
+        {
+            isDownTrigger = true;
+        }
+            
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.TryGetComponent<Player>(out var collidedPlayer))
         {
-            isDownTrigger = true;
-            shouldChangeCamera = true;
-            player = collidedPlayer; // Сохраняем ссылку на игрока
             shouldRotate = true;
+            player = collidedPlayer; // Сохраняем ссылку на игрока
             
             newPosition.x = player.transform.position.x;
             newPosition.z = player.transform.position.z;
@@ -46,16 +54,8 @@ public class DownTrigger : MonoBehaviour
 
             if (newPosition.z == -12f)
             {
-                Debug.Log("12f");
                 newPosition.z = -13f;
             }
-                
-            else if (newPosition.z == -13f)
-            {
-                Debug.Log("13f");
-                newPosition.z = -12f;   
-            }
-                
         }
     }
 
@@ -64,7 +64,6 @@ public class DownTrigger : MonoBehaviour
         if (shouldRotate)
         {
             mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, new Vector3(0.89375f, -6.14f, -29.35f), Time.deltaTime * rotationSpeed);
-            Debug.Log("Ya gay!");
             mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetSize, Time.deltaTime * zoomSpeed);
 
             if (Mathf.Abs(mainCamera.orthographicSize - targetSize) < 0.01f)
@@ -78,12 +77,15 @@ public class DownTrigger : MonoBehaviour
             if (Quaternion.Angle(targetObject.rotation, targetRotation) < 0.1f)
             {
                 targetObject.rotation = targetRotation;
-                shouldRotate = false;
 
                 if (player != null)
                 {
                     player.transform.position = newPosition;  // Даем персонажу новую позицию
                     CharacterOn(player);
+
+                    UpdateRotation();
+                    shouldRotate = false;                    
+                    isDownTrigger = false;
                 }
             }
         }
@@ -99,6 +101,7 @@ public class DownTrigger : MonoBehaviour
         }
     }
 
+
     private void CharacterOff(Player player)
     {
         player.GetComponent<Rigidbody2D>().isKinematic = true;
@@ -111,5 +114,11 @@ public class DownTrigger : MonoBehaviour
         player.GetComponent<Rigidbody2D>().isKinematic = false;
         player.GetComponent<SpriteRenderer>().enabled = true;
         player.GetComponent<Collider2D>().enabled = true;
+    }
+
+    private void UpdateRotation()
+    {
+        rotate += 90;
+        targetRotation = Quaternion.Euler(rotate, 0, 0);
     }
 }
