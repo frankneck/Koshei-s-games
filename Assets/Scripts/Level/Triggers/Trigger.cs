@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -23,8 +24,8 @@ public class Trigger : MonoBehaviour
     private Transform targetObject;  // Присвоим значение куба
     private Quaternion targetRotation;
     public bool shouldRotate = false;
-    private float rotate = 90f;
-    private float rotateY = 90f;
+    private float rotateX = 0f;
+    private float rotateY = 0f;
 
     // Camera
     private float initialSize;
@@ -65,7 +66,7 @@ public class Trigger : MonoBehaviour
             sides[i].GetComponent<Collider2D>().enabled = false;
 
         targetObject = cube.GetComponent<Transform>();  // Объект, который будем двигать
-        targetRotation = Quaternion.Euler(rotate, 0, 0); // Насколько двигаем объект
+        targetRotation = Quaternion.Euler(0, 0, 0); // Насколько двигаем объект
        
         initialSize = mainCamera.orthographicSize; // Запоминание позиции камеры
     }
@@ -91,23 +92,36 @@ public class Trigger : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        //if (triggerPerformed) return; // На случай если игрок нажмет несколько раз
-
         if (collision.TryGetComponent<Player>(out var collidedPlayer))
         {
-            triggerPerformed = true; // Флаг - триггер нажат
+            player = collidedPlayer;
+
+            Debug.Log($"Triggered by: {this.gameObject.tag}");
+            Debug.Log($"shouldRotate: {shouldRotate}, rotateX: {rotateX}, rotateY: {rotateY}, targetRotation: {targetRotation.eulerAngles}");
+
+            triggerPerformed = true;
             shouldRotate = true;
-            player = collidedPlayer; // Сохраняем ссылку на игрока
-
-            newPosition.x = player.transform.position.x;
-            newPosition.z = player.transform.position.z;
-
-            CharacterOff(player);  // Отключаем персонажа и его коллизию, делаем кинематичным
-
-            if (newPosition.z == -12f)
+            if (this.gameObject.CompareTag("Down"))
             {
-                newPosition.z = -13f;
+                UpdateRotationX();
+                Debug.Log("Произошло вращение по X");
+
+                newPosition.x = player.transform.position.x;
+                newPosition.z = player.transform.position.z;
             }
+            else if (this.gameObject.CompareTag("Left") || this.gameObject.CompareTag("Right"))
+            {
+                UpdateRotationY();
+                Debug.Log("Произошло вращение по Y");
+
+                newPosition.y = player.transform.position.y;
+                newPosition.z = player.transform.position.z;
+            }
+
+
+
+
+            CharacterOff(player);
         }
     }
 
@@ -125,16 +139,26 @@ public class Trigger : MonoBehaviour
         player.GetComponent<Collider2D>().enabled = true;
     }
 
-    private void UpdateRotation()
+    private void UpdateRotationX()
     {
-        rotate += 90;
-        targetRotation = Quaternion.Euler(rotate, 0, 0);
+        rotateX += 90;
+        targetRotation = Quaternion.Euler(rotateX, rotateY, 0);
+        Debug.Log($"Updated rotateX: {rotateX}, New targetRotation: {targetRotation.eulerAngles}");
     }
 
     private void UpdateRotationY()
     {
-        rotateY -= 90;
-        targetRotation = Quaternion.Euler(0, rotateY, 0);
+        if (this.gameObject.CompareTag("Left"))
+        {
+            rotateY -= 90;
+            Debug.Log("Left Trigger: Updated rotateY");
+        }
+        else if (this.gameObject.CompareTag("Right"))
+        {
+            rotateY += 90;
+            Debug.Log("Right Trigger: Updated rotateY");
+        }
+        targetRotation = Quaternion.Euler(rotateX, rotateY, 0);
     }
 
     private void ResetCameraZoom()
@@ -172,16 +196,6 @@ public class Trigger : MonoBehaviour
             {
                 player.transform.position = newPosition;  // Даем персонажу новую позицию
                 CharacterOn(player);
-                if (this.gameObject.tag == "Left")
-                {
-                    UpdateRotationY();
-                    Debug.Log("Произошло вращение по Y");
-                }
-                else
-                {
-                    UpdateRotation();
-                    Debug.Log("Произошло вращение по X");
-                }
                 shouldRotate = false;
             }
         }
@@ -190,12 +204,13 @@ public class Trigger : MonoBehaviour
     private void DefineCurrentSide()
     {
         Debug.Log($"Текущая тайлмап: {currentTilemap.name}");
+        Debug.Log($"Текущий тег: {this.gameObject.tag == "Down"}");
 
         switch (System.Array.IndexOf(sides, currentTilemap))
         {
             // For A
             case 0: 
-                if (this.targetObject.tag == "Down")
+                if (this.gameObject.tag == "Down")
                 {
                     Debug.Log("Нижний триггер A");
                     lastTilemap = currentTilemap;
@@ -204,50 +219,173 @@ public class Trigger : MonoBehaviour
                     lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 }
-            break;
+                else if (this.gameObject.tag == "Left")
+                {
+                    Debug.Log("Левый триггер A");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[4]; // E
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                else if(this.gameObject.tag == "Right")
+                {
+                    Debug.Log("Правый триггер A");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[2]; // C
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                break;
 
             // For B
             case 1:     
-                if (this.targetObject.tag == "Down")
+                if (this.gameObject.tag == "Down")
                 {
-                    Debug.Log("Нижний триггер A");
+                    Debug.Log("Нижний триггер B");
                     lastTilemap = currentTilemap;
                     currentTilemap = sides[0]; // A
                     currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 }
-            break;
+                else if (this.gameObject.tag == "Left")
+                {
+                    Debug.Log("Левый триггер B");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[4]; // E
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                else if (this.gameObject.tag == "Right")
+                {
+                    Debug.Log("Правый триггер B");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[2]; // C
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                break;
+            // For C
+            case 2:
+                if (this.gameObject.tag == "Down")
+                {
+                    Debug.Log("Нижний триггер B");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[5]; // F
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                else if (this.gameObject.tag == "Left")
+                {
+                    Debug.Log("Левый триггер B");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[0]; // A
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                else if (this.gameObject.tag == "Right")
+                {
+                    Debug.Log("Правый триггер B");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[3]; // D
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                break;
 
             // For D
             case 3:     
-                if (this.targetObject.tag == "Down")
+                if (this.gameObject.tag == "Down")
                 {
-                    Debug.Log("Нижний триггер A");
+                    Debug.Log("Нижний триггер D");
                     lastTilemap = currentTilemap;
                     currentTilemap = sides[1]; // B
                     currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 }
-            break;
-
-            // For F
-            case 5:     
-                if (this.targetObject.tag == "Down")
+                else if (this.gameObject.tag == "Left")
                 {
-                    Debug.Log("Нижний триггер A");
+                    Debug.Log("Левый триггер D");
                     lastTilemap = currentTilemap;
-                    currentTilemap = sides[3]; // B
+                    currentTilemap = sides[2]; // C
                     currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 }
-                if (this.targetObject.tag == "Left")
+                else if (this.gameObject.tag == "Right")
                 {
-                    Debug.Log("Нижний триггер A");
+                    Debug.Log("Правый триггер D");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[4]; // E
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                break;
+            // For E
+            case 4:
+                if (this.gameObject.tag == "Down")
+                {
+                    Debug.Log("Нижний триггер D");
                     lastTilemap = currentTilemap;
                     currentTilemap = sides[5]; // F
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                else if (this.gameObject.tag == "Left")
+                {
+                    Debug.Log("Левый триггер D");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[3]; // D
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                else if (this.gameObject.tag == "Right")
+                {
+                    Debug.Log("Правый триггер D");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[0]; // A
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                break;
+
+            // For F
+            case 5:     
+                if (this.gameObject.tag == "Down")
+                {
+                    Debug.Log("Нижний триггер F");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[3]; // D
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                else if (this.gameObject.tag == "Left")
+                {
+                    Debug.Log("Левый триггер F");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[4]; // E
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                else if (this.gameObject.tag == "Right")
+                {
+                    Debug.Log("Правый триггер F");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[2]; // C
                     currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
