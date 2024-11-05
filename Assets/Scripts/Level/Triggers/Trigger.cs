@@ -24,6 +24,7 @@ public class Trigger : MonoBehaviour
     private Quaternion targetRotation;
     public bool shouldRotate = false;
     private float rotate = 90f;
+    private float rotateY = 90f;
 
     // Camera
     private float initialSize;
@@ -88,7 +89,7 @@ public class Trigger : MonoBehaviour
         }
     }
 
-    public void OnTriggerExit2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
         //if (triggerPerformed) return; // На случай если игрок нажмет несколько раз
 
@@ -130,6 +131,12 @@ public class Trigger : MonoBehaviour
         targetRotation = Quaternion.Euler(rotate, 0, 0);
     }
 
+    private void UpdateRotationY()
+    {
+        rotateY -= 90;
+        targetRotation = Quaternion.Euler(0, rotateY, 0);
+    }
+
     private void ResetCameraZoom()
     {
         mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, initialSize, Time.deltaTime * zoomSpeed);
@@ -165,7 +172,16 @@ public class Trigger : MonoBehaviour
             {
                 player.transform.position = newPosition;  // Даем персонажу новую позицию
                 CharacterOn(player);
-                UpdateRotation();
+                if (this.gameObject.tag == "Left")
+                {
+                    UpdateRotationY();
+                    Debug.Log("Произошло вращение по Y");
+                }
+                else
+                {
+                    UpdateRotation();
+                    Debug.Log("Произошло вращение по X");
+                }
                 shouldRotate = false;
             }
         }
@@ -179,7 +195,7 @@ public class Trigger : MonoBehaviour
         {
             // For A
             case 0: 
-                if (triggerPerformed)
+                if (this.targetObject.tag == "Down")
                 {
                     Debug.Log("Нижний триггер A");
                     lastTilemap = currentTilemap;
@@ -192,7 +208,7 @@ public class Trigger : MonoBehaviour
 
             // For B
             case 1:     
-                if (triggerPerformed)
+                if (this.targetObject.tag == "Down")
                 {
                     Debug.Log("Нижний триггер A");
                     lastTilemap = currentTilemap;
@@ -205,7 +221,7 @@ public class Trigger : MonoBehaviour
 
             // For D
             case 3:     
-                if (triggerPerformed)
+                if (this.targetObject.tag == "Down")
                 {
                     Debug.Log("Нижний триггер A");
                     lastTilemap = currentTilemap;
@@ -218,7 +234,7 @@ public class Trigger : MonoBehaviour
 
             // For F
             case 5:     
-                if (triggerPerformed)
+                if (this.targetObject.tag == "Down")
                 {
                     Debug.Log("Нижний триггер A");
                     lastTilemap = currentTilemap;
@@ -227,7 +243,16 @@ public class Trigger : MonoBehaviour
                     lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 }
-            break;
+                if (this.targetObject.tag == "Left")
+                {
+                    Debug.Log("Нижний триггер A");
+                    lastTilemap = currentTilemap;
+                    currentTilemap = sides[5]; // F
+                    currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+                    lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                    break;
+                }
+                break;
 
             default:
                 Debug.LogWarning("Сторона не обработана.");
