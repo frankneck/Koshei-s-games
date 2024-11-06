@@ -11098,7 +11098,7 @@ MonoBehaviour:
   mainCamera: {fileID: 684834901}
   targetSize: 30
   zoomSpeed: 15
-  newPosition: {x: -10, y: 0, z: 0}
+  newPosition: {x: -10.62, y: 0, z: 0}
   shouldRotate: 0
 --- !u!61 &446923244
 BoxCollider2D:
@@ -35794,7 +35794,7 @@ MonoBehaviour:
   mainCamera: {fileID: 684834901}
   targetSize: 30
   zoomSpeed: 15
-  newPosition: {x: 9, y: 0, z: 0}
+  newPosition: {x: 10.62, y: 0, z: 0}
   shouldRotate: 0
 --- !u!61 &1252639307
 BoxCollider2D:
@@ -36038,7 +36038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
+  m_IgnoreReversedGraphics: 0
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
@@ -44641,6 +44641,7 @@ GameObject:
   - component: {fileID: 1690668793}
   - component: {fileID: 1690668794}
   - component: {fileID: 1690668795}
+  - component: {fileID: 1690668796}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -44722,6 +44723,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateX: 0
   rotateY: 0
+--- !u!114 &1690668796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690668791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5e03d928eaa594e8a041a0ae4d8e6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sides: []
+  currentTilemap: {fileID: 0}
+  lastTilemap: {fileID: 0}
 --- !u!1 &1696144042
 GameObject:
   m_ObjectHideFlags: 0
