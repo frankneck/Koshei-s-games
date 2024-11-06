@@ -24,8 +24,6 @@ public class Trigger : MonoBehaviour
     private Transform targetObject;  // Присвоим значение куба
     private Quaternion targetRotation;
     public bool shouldRotate = false;
-    private float rotateX = 0f;
-    private float rotateY = 0f;
 
     // Camera
     private float initialSize;
@@ -34,9 +32,12 @@ public class Trigger : MonoBehaviour
     // Player
     private Player player;
 
-
     //Other
     private bool triggerPerformed = false;
+    
+    // Managers
+    private CubeRotationManager cubeRotationManager;
+    //private CubeRotationManager cubeRotationManager;
 
     // Tilemap
     private Tilemap[] sides;
@@ -53,8 +54,10 @@ public class Trigger : MonoBehaviour
         sides[3] = cube.transform.Find("D/FrontD").GetComponent<Tilemap>();  //D
         sides[4] = cube.transform.Find("E/FrontE").GetComponent<Tilemap>();  //E
         sides[5] = cube.transform.Find("F/FrontF").GetComponent<Tilemap>();  //F
-    }
 
+        if (cubeRotationManager == null)
+            cubeRotationManager = cube.GetComponent<CubeRotationManager>();
+    }
     void Start()
     {
         // Настройка изначальной tilemap - A
@@ -65,14 +68,14 @@ public class Trigger : MonoBehaviour
         for (int i = 2; i < sides.Length; i++)
             sides[i].GetComponent<Collider2D>().enabled = false;
 
-        targetObject = cube.GetComponent<Transform>();  // Объект, который будем двигать
-        targetRotation = Quaternion.Euler(0, 0, 0); // Насколько двигаем объект
+        targetObject = cube.GetComponent<Transform>();
        
         initialSize = mainCamera.orthographicSize; // Запоминание позиции камеры
     }
-
     private void FixedUpdate()
     {
+        Debug.Log($"FixedUpdate Start - rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}");
+
         if (shouldRotate)
         {
             Rotate();
@@ -88,102 +91,36 @@ public class Trigger : MonoBehaviour
             DefineCurrentSide();
             triggerPerformed = false;
         }
-    }
 
+        Debug.Log($"FixedUpdate End - rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}");
+    }
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent<Player>(out var collidedPlayer))
         {
             player = collidedPlayer;
 
-            Debug.Log($"Triggered by: {this.gameObject.tag}");
-            Debug.Log($"shouldRotate: {shouldRotate}, rotateX: {rotateX}, rotateY: {rotateY}, targetRotation: {targetRotation.eulerAngles}");
+            Debug.Log($"shouldRotate: {shouldRotate}, rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}, targetRotation: {targetRotation.eulerAngles}");
 
             triggerPerformed = true;
             shouldRotate = true;
             if (this.gameObject.CompareTag("Down"))
             {
                 UpdateRotationX();
-                Debug.Log("Произошло вращение по X");
 
                 newPosition.x = player.transform.position.x;
                 newPosition.z = player.transform.position.z;
             }
-            else if (this.gameObject.CompareTag("Left") || this.gameObject.CompareTag("Right"))
+            if (this.gameObject.CompareTag("Left") || this.gameObject.CompareTag("Right"))
             {
                 UpdateRotationY();
-                Debug.Log("Произошло вращение по Y");
 
                 newPosition.y = player.transform.position.y;
                 newPosition.z = player.transform.position.z;
             }
-
-
-
-
             CharacterOff(player);
         }
     }
-
-    private void CharacterOff(Player player) // Отключение персонажа
-    {
-        player.GetComponent<Rigidbody2D>().isKinematic = true;
-        player.GetComponent<SpriteRenderer>().enabled = false;
-        player.GetComponent<Collider2D>().enabled = false;
-    }
-
-    private void CharacterOn(Player player) // Включение персонажа
-    {
-        player.GetComponent<Rigidbody2D>().isKinematic = false;
-        player.GetComponent<SpriteRenderer>().enabled = true;
-        player.GetComponent<Collider2D>().enabled = true;
-    }
-
-    private void UpdateRotationX()
-    {
-        rotateX += 90;
-        targetRotation = Quaternion.Euler(rotateX, rotateY, 0);
-        Debug.Log($"Updated rotateX: {rotateX}, New targetRotation: {targetRotation.eulerAngles}");
-    }
-
-    private void UpdateRotationY()
-    {
-        if (this.gameObject.CompareTag("Left"))
-        {
-            rotateY -= 90;
-            Debug.Log("Left Trigger: Updated rotateY");
-        }
-        else if (this.gameObject.CompareTag("Right"))
-        {
-            rotateY += 90;
-            Debug.Log("Right Trigger: Updated rotateY");
-        }
-        targetRotation = Quaternion.Euler(rotateX, rotateY, 0);
-    }
-
-    private void ResetCameraZoom()
-    {
-        mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, initialSize, Time.deltaTime * zoomSpeed);
-
-        if (Mathf.Abs(mainCamera.orthographicSize - targetSize) < 0.01f)
-        {
-            isZooming = false;
-            mainCamera.orthographicSize = initialSize;
-        }
-    }
-
-    private void ZoomCamera()
-    {
-        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, new Vector3(0.89375f, -6.14f, -29.35f), Time.deltaTime * rotationSpeed);
-        mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetSize, Time.deltaTime * zoomSpeed);
-
-        if (Mathf.Abs(mainCamera.orthographicSize - targetSize) < 0.01f)
-        {
-            isZooming = true;
-            mainCamera.orthographicSize = targetSize;
-        }
-    }
-
     private void Rotate()
     {
         targetObject.rotation = Quaternion.RotateTowards(targetObject.rotation, targetRotation, Time.deltaTime * rotationSpeed);
@@ -200,7 +137,50 @@ public class Trigger : MonoBehaviour
             }
         }
     }
+    private void UpdateRotationY()
+    {
+        Debug.Log($"Before UpdateRotationY - rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}");
 
+        if (this.gameObject.CompareTag("Left"))
+        {
+            cubeRotationManager.rotateY -= 90;
+        }
+        else if (this.gameObject.CompareTag("Right"))
+        {
+            cubeRotationManager.rotateY += 90;
+        }
+        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, 0);
+
+        Debug.Log($"After UpdateRotationY - rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}, targetRotation: {targetRotation.eulerAngles}");
+    }
+    private void UpdateRotationX()
+    {
+        cubeRotationManager.rotateX += 90;
+        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, 0);
+        Debug.Log($"UpdateRotationX - Updated rotateX: {cubeRotationManager.rotateX}, New targetRotation: {targetRotation.eulerAngles}");
+
+    }
+    private void ZoomCamera()
+    {
+        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, new Vector3(0.89375f, -6.14f, -29.35f), Time.deltaTime * rotationSpeed);
+        mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetSize, Time.deltaTime * zoomSpeed);
+
+        if (Mathf.Abs(mainCamera.orthographicSize - targetSize) < 0.01f)
+        {
+            isZooming = true;
+            mainCamera.orthographicSize = targetSize;
+        }
+    }
+    private void ResetCameraZoom()
+    {
+        mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, initialSize, Time.deltaTime * zoomSpeed);
+
+        if (Mathf.Abs(mainCamera.orthographicSize - targetSize) < 0.01f)
+        {
+            isZooming = false;
+            mainCamera.orthographicSize = initialSize;
+        }
+    }
     private void DefineCurrentSide()
     {
         Debug.Log($"Текущая тайлмап: {currentTilemap.name}");
@@ -397,5 +377,16 @@ public class Trigger : MonoBehaviour
                 break;
         }
     }
-
+    private void CharacterOff(Player player) // Отключение персонажа
+    {
+        player.GetComponent<Rigidbody2D>().isKinematic = true;
+        player.GetComponent<SpriteRenderer>().enabled = false;
+        player.GetComponent<Collider2D>().enabled = false;
+    }
+    private void CharacterOn(Player player) // Включение персонажа
+    {
+        player.GetComponent<Rigidbody2D>().isKinematic = false;
+        player.GetComponent<SpriteRenderer>().enabled = true;
+        player.GetComponent<Collider2D>().enabled = true;
+    }
 }
