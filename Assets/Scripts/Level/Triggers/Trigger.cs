@@ -7,7 +7,8 @@ using UnityEngine.Tilemaps;
 public class Trigger : MonoBehaviour
 {
     [Header("Object")]
-    [SerializeField] private GameObject cube;  // Сам куб
+    [SerializeField] private GameObject cube;
+    [SerializeField] private GameObject yJoint;
 
     [Header("Rotation cube")]
     [SerializeField] private float rotationSpeed = 45f;
@@ -21,8 +22,10 @@ public class Trigger : MonoBehaviour
     [SerializeField] private Vector3 newPosition;
 
     // Rotation of cube
-    private Transform targetObject;  // Присвоим значение куба
-    private Quaternion targetRotation;
+    private Transform targetObjectCube;
+    private Transform targetObjectYjoint;
+    private Quaternion targetRotationY;
+    private Quaternion targetRotationX;
     public bool shouldRotate = false;
 
     // Camera
@@ -47,15 +50,18 @@ public class Trigger : MonoBehaviour
         if (tilemapManager == null)
             tilemapManager = cube.GetComponent<TilemapManager>();
     }
+    
     void Start()
     {
-        for (int i = 2; i < tilemapManager.sides.Length; i++)
+        for (int i = 1; i < tilemapManager.sides.Length; i++)
             tilemapManager.sides[i].GetComponent<Collider2D>().enabled = false;
 
-        targetObject = cube.GetComponent<Transform>();
-       
+        targetObjectCube = cube.GetComponent<Transform>();
+        targetObjectYjoint = yJoint.GetComponent<Transform>();
+
         initialSize = mainCamera.orthographicSize; // Запоминание позиции камеры
     }
+    
     private void FixedUpdate()
     {
         Debug.Log($"FixedUpdate Start - rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}");
@@ -78,13 +84,14 @@ public class Trigger : MonoBehaviour
 
         Debug.Log($"FixedUpdate End - rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}");
     }
+    
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent<Player>(out var collidedPlayer))
         {
             player = collidedPlayer;
 
-            Debug.Log($"shouldRotate: {shouldRotate}, rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}, targetRotation: {targetRotation.eulerAngles}");
+            Debug.Log($"shouldRotate: {shouldRotate}, rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}, targetRotation: {targetRotationY.eulerAngles}");
 
             triggerPerformed = true;
             shouldRotate = true;
@@ -105,48 +112,62 @@ public class Trigger : MonoBehaviour
             CharacterOff(player);
         }
     }
+    
     private void Rotate()
     {
-        targetObject.rotation = Quaternion.RotateTowards(targetObject.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-
-        if (Quaternion.Angle(targetObject.rotation, targetRotation) < 0.1f)
+        if (this.gameObject.tag == "Right" || this.gameObject.tag == "Left")
         {
-            targetObject.rotation = targetRotation;
+            targetObjectCube.rotation = Quaternion.RotateTowards(targetObjectCube.rotation, targetRotationY, Time.deltaTime * rotationSpeed);
 
-            if (player != null)
+            if (Quaternion.Angle(targetObjectCube.rotation, targetRotationY) < 0.1f || Quaternion.Angle(targetObjectYjoint.rotation, targetRotationY) < 0.1f)
             {
-                player.transform.position = newPosition;  // Даем персонажу новую позицию
-                CharacterOn(player);
-                shouldRotate = false;
+                targetObjectCube.rotation = targetRotationY;
+
+                if (player != null)
+                {
+                    player.transform.position = newPosition;
+                    CharacterOn(player);
+                    shouldRotate = false;
+                }
+            }
+        }
+        else if (this.gameObject.tag == "Down")
+        {
+            targetObjectYjoint.rotation = Quaternion.RotateTowards(targetObjectYjoint.rotation, targetRotationX, Time.deltaTime * rotationSpeed);
+
+            if (Quaternion.Angle(targetObjectCube.rotation, targetRotationX) < 0.1f || Quaternion.Angle(targetObjectYjoint.rotation, targetRotationX) < 0.1f)
+            {
+                targetObjectYjoint.rotation = targetRotationX;
+
+                if (player != null)
+                {
+                    player.transform.position = newPosition;
+                    CharacterOn(player);
+                    shouldRotate = false;
+                }
             }
         }
     }
+    
     private void UpdateRotationY()
     {
-        Debug.Log($"Before UpdateRotationY - rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}");
-
         if (this.gameObject.CompareTag("Left"))
         {
-            cubeRotationManager.rotateY -= 90;
-            //cubeRotationManager.yRotationChange = Quaternion.AngleAxis(-90, Vector3.left);
+            cubeRotationManager.rotateY += -90;
         }
         else if (this.gameObject.CompareTag("Right"))
         {
             cubeRotationManager.rotateY += 90;
-            //cubeRotationManager.yRotationChange = Quaternion.AngleAxis(90, Vector3.left);
         }
-        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, 0);
-        //targetRotation *= cubeRotationManager.yRotationChange;
-
-        Debug.Log($"After UpdateRotationY - rotateX: {cubeRotationManager.rotateX}, rotateY: {cubeRotationManager.rotateY}, targetRotation: {targetRotation.eulerAngles}");
+        targetRotationY = Quaternion.Euler(0, cubeRotationManager.rotateY, 0);
     }
+    
     private void UpdateRotationX()
     {
         cubeRotationManager.rotateX += 90;
-        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, 0);
-        Debug.Log($"UpdateRotationX - Updated rotateX: {cubeRotationManager.rotateX}, New targetRotation: {targetRotation.eulerAngles}");
-
+        targetRotationX = Quaternion.Euler(cubeRotationManager.rotateX, 0, 0);
     }
+
     private void ZoomCamera()
     {
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, new Vector3(0.89375f, -6.14f, -29.35f), Time.deltaTime * rotationSpeed);
@@ -158,6 +179,7 @@ public class Trigger : MonoBehaviour
             mainCamera.orthographicSize = targetSize;
         }
     }
+    
     private void ResetCameraZoom()
     {
         mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, initialSize, Time.deltaTime * zoomSpeed);
@@ -168,6 +190,7 @@ public class Trigger : MonoBehaviour
             mainCamera.orthographicSize = initialSize;
         }
     }
+    
     private void DefineCurrentSide()
     {
         Debug.Log($"Текущая тайлмап: {tilemapManager.currentTilemap.name}");
@@ -364,12 +387,14 @@ public class Trigger : MonoBehaviour
                 break;
         }
     }
+    
     private void CharacterOff(Player player) // Отключение персонажа
     {
         player.GetComponent<Rigidbody2D>().isKinematic = true;
         player.GetComponent<SpriteRenderer>().enabled = false;
         player.GetComponent<Collider2D>().enabled = false;
     }
+    
     private void CharacterOn(Player player) // Включение персонажа
     {
         player.GetComponent<Rigidbody2D>().isKinematic = false;
