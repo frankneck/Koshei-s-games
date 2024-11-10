@@ -7,11 +7,12 @@ TagManager:
   - Left
   - Right
   - Down
+  - Up
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - OldGround
+  - Wear
   - Water
   - UI
   - Back
