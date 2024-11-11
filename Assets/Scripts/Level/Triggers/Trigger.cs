@@ -224,6 +224,7 @@ public class Trigger : MonoBehaviour
                     break;
                 case "F8":
                     UpdateRotationZplus();
+                    UpdateRotationZplus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер F");
