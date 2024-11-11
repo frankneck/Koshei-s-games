@@ -20,6 +20,7 @@ public class Trigger : MonoBehaviour
 
     [Header("New Postiton for y")]
     [SerializeField] private Vector3 newPosition;
+    [SerializeField] private Transform SpawnPoint;
 
     public bool shouldRotate = false;
 
@@ -79,11 +80,6 @@ public class Trigger : MonoBehaviour
         else if (isZooming)
         {
             ResetCameraZoom();
-        }
-        if (triggerPerformed)
-        {
-            DefineCurrentSide();
-            triggerPerformed = false;
         }
     }
     
@@ -449,7 +445,7 @@ public class Trigger : MonoBehaviour
 
                     Debug.Log("Верхний триггер B");
                     tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
+                    tilemapManager.currentTilemap = tilemapManager.sides[3]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
@@ -459,7 +455,7 @@ public class Trigger : MonoBehaviour
 
                     Debug.Log("Верхний триггер B");
                     tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
+                    tilemapManager.currentTilemap = tilemapManager.sides[3]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
@@ -673,7 +669,7 @@ public class Trigger : MonoBehaviour
 		shouldRotate = false;
 		if (player != null)
         {
-            player.transform.position = newPosition;
+            player.transform.position = SpawnPoint.position;
             CharacterOn(player);
             shouldRotate = false;
 
@@ -783,10 +779,10 @@ public class Trigger : MonoBehaviour
                     break;
                 // Up
                 case "B1":
-                    SwitchTriggers(5);
+                    SwitchTriggers(3);
                     break;
                 case "B2":
-                    SwitchTriggers(5);
+                    SwitchTriggers(3);
                     break;
                 // Down
                 case "B5":
@@ -863,12 +859,10 @@ public class Trigger : MonoBehaviour
     {
         
     }
-
     private void UpdateRotationYminus()
     {
 		
 	}
-
     private void UpdateRotationXplus()
     {
 		
@@ -881,7 +875,6 @@ public class Trigger : MonoBehaviour
     {
 		
 	}
-
     private void UpdateRotationZminus()
     {
 		
@@ -906,192 +899,6 @@ public class Trigger : MonoBehaviour
         {
             isZooming = false;
             mainCamera.orthographicSize = initialSize;
-        }
-    }
-    private void DefineCurrentSide()
-    {
-        Debug.Log($"Текущая тайлмап: {tilemapManager.currentTilemap.name}");
-        Debug.Log($"Текущий тег: {this.gameObject.tag == "Down"}");
-
-        switch (System.Array.IndexOf(tilemapManager.sides, tilemapManager.currentTilemap))
-        {
-            // For A
-            case 0: 
-                if (this.gameObject.tag == "Down")
-                {
-                    break;
-                }
-                else if (this.gameObject.tag == "Left")
-                {
-                    Debug.Log("Левый триггер A");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[4]; // E
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if(this.gameObject.tag == "Right")
-                {
-                    Debug.Log("Правый триггер A");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[2]; // C
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                break;
-
-            // For B
-            case 1:     
-                if (this.gameObject.tag == "Down")
-                {
-                    Debug.Log("Нижний триггер B");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if (this.gameObject.tag == "Left")
-                {
-                    Debug.Log("Левый триггер B");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[4]; // E
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if (this.gameObject.tag == "Right")
-                {
-                    Debug.Log("Правый триггер B");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[2]; // C
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                break;
-            // For C
-            case 2:
-                if (this.gameObject.tag == "Down")
-                {
-                    Debug.Log("Нижний триггер C");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if (this.gameObject.tag == "Left")
-                {
-                    Debug.Log("Левый триггер C");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if (this.gameObject.tag == "Right")
-                {
-                    Debug.Log("Правый триггер C");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[3]; // D
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                break;
-
-            // For D
-            case 3:     
-                if (this.gameObject.tag == "Down")
-                {
-                    Debug.Log("Нижний триггер D");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[1]; // B
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if (this.gameObject.tag == "Left")
-                {
-                    Debug.Log("Левый триггер D");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[2]; // C
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if (this.gameObject.tag == "Right")
-                {
-                    Debug.Log("Правый триггер D");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[4]; // E
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                break;
-            // For E
-            case 4:
-                if (this.gameObject.tag == "Down")
-                {
-                    Debug.Log("Нижний триггер E");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if (this.gameObject.tag == "Left")
-                {
-                    Debug.Log("Левый триггер E");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[3]; // D
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if (this.gameObject.tag == "Right")
-                {
-                    Debug.Log("Правый триггер E");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                break;
-
-            // For F
-            case 5:     
-                if (this.gameObject.tag == "Down")
-                {
-                    Debug.Log("Нижний триггер F");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[3]; // D
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                else if (this.gameObject.tag == "Left")
-                {
- 
-                }
-                else if (this.gameObject.tag == "Right")
-                {
-                    Debug.Log("Правый триггер F");
-                    tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[2]; // C
-                    tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
-                    break;
-                }
-                break;
-
-            default:
-                Debug.LogWarning("Сторона не обработана.");
-                break;
         }
     }
     private void CharacterOff(Player player) // Отключение персонажа

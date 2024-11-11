@@ -7,4 +7,5 @@ public class LevelProgress
     public int LevelScore;
     public int LevelHp;
     public int LevelWeapon;
+    public int LevelKeys;
 }

@@ -8,26 +8,34 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private TMP_Text ScoreText;
     [SerializeField] private TMP_Text WeaponText;
+    [SerializeField] private TMP_Text KeysText;
 
-    private List<Coins> coinsList;
-    private List<Weapon> weaponList;
+    public List<Coins> coinsList;
+    public List<Weapon> weaponList;
+    public List<Keys> keysList;
+    
     private LevelProgress progress;
 
     private void Awake()
     {
         progress = new LevelProgress();
+        
         coinsList = FindObjectsOfType<Coins>().ToList();
-
         foreach (Coins coin in coinsList)
         {
             coin.SetLevelManager(this);
         }
 
         weaponList = FindObjectsOfType<Weapon>().ToList();
-
         foreach (Weapon weapon in weaponList)
         {
             weapon.SetLevelManager(this);
+        }
+
+        keysList = FindObjectsOfType<Keys>().ToList();
+        foreach (Keys key in keysList)
+        {
+            key.SetLevelManager(this);
         }
     }
 
@@ -41,5 +49,10 @@ public class LevelManager : MonoBehaviour
     {
         progress.LevelWeapon += 1;
         WeaponText.text = $"Weapon: {progress.LevelWeapon}";
+    }
+    public void UpdateKeys()
+    {
+        progress.LevelKeys += 1;
+        WeaponText.text = $"Keys: {progress.LevelKeys}";
     }
 }

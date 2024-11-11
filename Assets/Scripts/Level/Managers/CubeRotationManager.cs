@@ -6,8 +6,7 @@ public class CubeRotationManager : MonoBehaviour
 {
 	[Header("Rotation")]
 	[SerializeField] private Transform XJoint;
-	[SerializeField] private Transform YJoint;
-	[SerializeField] private float rotationSpeed = 1f;
+	[SerializeField] private float rotationSpeed = 50f;
 
 	public void Rotate(Vector3 axis, Action rotated)
 	{
