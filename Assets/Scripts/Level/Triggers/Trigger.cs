@@ -21,10 +21,6 @@ public class Trigger : MonoBehaviour
     [Header("New Postiton for y")]
     [SerializeField] private Vector3 newPosition;
 
-    // Rotation of cube
-    private Transform targetObjectCube;
-    private Transform targetObjectYjoint;
-    private Quaternion targetRotation;
     public bool shouldRotate = false;
 
     // Camera
@@ -36,7 +32,6 @@ public class Trigger : MonoBehaviour
 
     //Other
     private bool triggerPerformed = false;
-    private Quaternion initialTarget;
     
     // Managers
     private CubeRotationManager cubeRotationManager;
@@ -53,8 +48,6 @@ public class Trigger : MonoBehaviour
 
         if (triggerManager == null)
             triggerManager = triggers.GetComponent<TriggerManager>();
-
-        targetObjectCube = cube.GetComponent<Transform>();
     }
     
     void Start()
@@ -81,7 +74,6 @@ public class Trigger : MonoBehaviour
     {
         if (shouldRotate)
         {
-            Rotate();
             ZoomCamera();
         }
         else if (isZooming)
@@ -103,14 +95,33 @@ public class Trigger : MonoBehaviour
 
             triggerPerformed = true;
             shouldRotate = true;
-            
-            switch (this.gameObject.name)
+
+			var direction = new Vector2(
+                gameObject.transform.position.x,
+				 gameObject.transform.position.y
+            ).normalized;
+
+            if (direction.x > 0.6f)
+            {
+				cubeRotationManager.Rotate(Vector3.up, Rotated);
+			} else if (direction.x < -0.6f)
+            {
+				cubeRotationManager.Rotate(Vector3.down, Rotated);
+			} else if (direction.y > 0.6f)
+            {
+				cubeRotationManager.Rotate(Vector3.left, Rotated);
+			} else
+			{
+				cubeRotationManager.Rotate(Vector3.right, Rotated);
+			}
+
+
+			switch (this.gameObject.name)
             {
                 // A
                 // Left
                 case "A7":
-                    SwapZ();
-                    //UpdateRotationYminus();
+                    UpdateRotationYminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер A");
@@ -122,8 +133,7 @@ public class Trigger : MonoBehaviour
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
                     break;
                 case "A8":
-                    SwapZ();
-                    //UpdateRotationYminus();
+                    UpdateRotationYminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер A");
@@ -155,8 +165,7 @@ public class Trigger : MonoBehaviour
                     break;
                 // Up
                 case "A1":
-                    SwapY();
-                    //UpdateRotationXminus();
+                    UpdateRotationXminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер A");
@@ -166,8 +175,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "A2":
-                    SwapY();
-                    //UpdateRotationXminus();
+                    UpdateRotationXminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер A");
@@ -233,8 +241,7 @@ public class Trigger : MonoBehaviour
                     break;
                 // Right
                 case "F3":
-                    SwapX();
-                    //UpdateRotationZminus();
+                    UpdateRotationZminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Правый триггер F");
@@ -244,8 +251,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "F4":
-                    SwapX();
-                    //UpdateRotationZminus();
+                    UpdateRotationZminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Правый триггер F");
@@ -256,8 +262,7 @@ public class Trigger : MonoBehaviour
                     break;
                 // Up
                 case "F1":
-                    SwapY();
-                    //UpdateRotationXminus();
+                    UpdateRotationXminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер F");
@@ -270,8 +275,7 @@ public class Trigger : MonoBehaviour
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
                     break;
                 case "F2":
-                    SwapY();
-                    //UpdateRotationXminus();
+                    UpdateRotationXminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер F");
@@ -313,8 +317,7 @@ public class Trigger : MonoBehaviour
                 // D
                 // Left
                 case "D7":
-                    SwapZ();
-                    //UpdateRotationYminus();
+                    UpdateRotationYminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер D");
@@ -324,8 +327,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "D8":
-                    SwapZ();
-                    //UpdateRotationYminus();
+                    UpdateRotationYminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер D");
@@ -357,8 +359,7 @@ public class Trigger : MonoBehaviour
                     break;
                 // Up
                 case "D1":
-                    SwapY();
-                    //UpdateRotationXplus();
+                    UpdateRotationXplus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер D");
@@ -368,8 +369,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "D2":
-                    SwapY();
-                    //UpdateRotationXplus();
+                    UpdateRotationXplus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер D");
@@ -380,8 +380,7 @@ public class Trigger : MonoBehaviour
                     break;
                 // Down
                 case "D5":
-                    SwapY();
-                    //UpdateRotationXminus();
+                    UpdateRotationXminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Нижний триггер D");
@@ -391,8 +390,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "D6":
-                    SwapY();
-                    //UpdateRotationXminus();
+                    UpdateRotationXminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Нижний триггер D");
@@ -404,8 +402,7 @@ public class Trigger : MonoBehaviour
                 // B
                 // Left
                 case "B7":
-                    SwapX();
-                    //UpdateRotationZminus();
+                    UpdateRotationZminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер B");
@@ -415,8 +412,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "B8":
-                    SwapX();
-                    //UpdateRotationZminus();
+                    UpdateRotationZminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер B");
@@ -448,8 +444,7 @@ public class Trigger : MonoBehaviour
                     break;
                 // Up
                 case "B1":
-                    SwapY();
-                    //UpdateRotationXminus();
+                    UpdateRotationXminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер B");
@@ -459,8 +454,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "B2":
-                    SwapY();
-                    //UpdateRotationXminus();
+                    UpdateRotationXminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер B");
@@ -493,8 +487,7 @@ public class Trigger : MonoBehaviour
                 // C
                 // Left
                 case "C7":
-                    SwapZ();
-                    //UpdateRotationYminus();
+                    UpdateRotationYminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер С");
@@ -504,8 +497,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "C8":
-                    SwapZ();
-                    //UpdateRotationYminus();
+                    UpdateRotationYminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер С");
@@ -537,8 +529,7 @@ public class Trigger : MonoBehaviour
                     break;
                 // Up
                 case "C1":
-                    SwapX();
-                    //UpdateRotationZminus();
+                    UpdateRotationZminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер С");
@@ -548,8 +539,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "C2":
-                    SwapX();
-                    //UpdateRotationZminus();
+                    UpdateRotationZminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Верхний триггер С");
@@ -586,8 +576,7 @@ public class Trigger : MonoBehaviour
                 // E
                 // Left
                 case "E7":
-                    SwapZ();
-                    //UpdateRotationYminus();
+                    UpdateRotationYminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер D");
@@ -597,8 +586,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "E8":
-                    SwapZ();
-                    //UpdateRotationYminus();
+                    UpdateRotationYminus();
                     newPosition.y = player.transform.position.y;
 
                     Debug.Log("Левый триггер D");
@@ -651,8 +639,7 @@ public class Trigger : MonoBehaviour
                     break;
                 // Down
                 case "E5":
-                    SwapX();
-                    //UpdateRotationZminus();
+                    UpdateRotationZminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Нижний триггер E");
@@ -662,8 +649,7 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
                     break;
                 case "E6":
-                    SwapX();
-                    //UpdateRotationZminus();
+                    UpdateRotationZminus();
                     newPosition.x = player.transform.position.x;
 
                     Debug.Log("Нижний триггер E");
@@ -679,236 +665,228 @@ public class Trigger : MonoBehaviour
         }
     }
     
-    private void Rotate()
+    private void Rotated()
     {
-        targetObjectCube.rotation = Quaternion.RotateTowards(targetObjectCube.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
+        tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
 
-
-        if (Quaternion.Angle(targetObjectCube.rotation, targetRotation) < 0.1f) // Угол поворота между двумя кватернионами
+		shouldRotate = false;
+		if (player != null)
         {
-            targetObjectCube.rotation = targetRotation;
-            
-            tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
-            tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
+            player.transform.position = newPosition;
+            CharacterOn(player);
+            shouldRotate = false;
 
-            if (player != null)
+            switch (this.gameObject.name)
             {
-                player.transform.position = newPosition;
-                CharacterOn(player);
-                shouldRotate = false;
-
-                switch (this.gameObject.name)
-                {
-                    // A
-                    // Left
-                    case "A7":
-                        SwitchTriggers(4);
-                        break;
-                    case "A8":
-                        SwitchTriggers(4);
-                        break;
-                    // Right
-                    case "A3":
-                        SwitchTriggers(2);
-                        break;
-                    case "A4":
-                        SwitchTriggers(2);
-                        break;
-                    // Up
-                    case "A1":
-                        SwitchTriggers(1);
-                        break;
-                    case "A2":
-                        SwitchTriggers(1);
-                        break;
-                    // Down
-                    case "A5":
-                        SwitchTriggers(5);
-                        break;
-                    case "A6":
-                        SwitchTriggers(5);
-                        break;
-                    // F
-                    // Left
-                    case "F7":
-                        SwitchTriggers(4);
-                        break;
-                    case "F8":
-                        SwitchTriggers(4);
-                        break;
-                    // Right
-                    case "F3":
-                        SwitchTriggers(2);
-                        break;
-                    case "F4":
-                        SwitchTriggers(2);
-                        break;
-                    // Up
-                    case "F1":
-                        SwitchTriggers(0);
-                        break;
-                    case "F2":
-                        SwitchTriggers(0);
-                        break;
-                    // Down
-                    case "F5":
-                        SwitchTriggers(3);
-                        break;
-                    case "F6":
-                        SwitchTriggers(3);
-                        break;
-                    // D
-                    // Left
-                    case "D7":
-                        SwitchTriggers(2);
-                        break;
-                    case "D8":
-                        SwitchTriggers(2);
-                        break;
-                    // Right
-                    case "D3":
-                        SwitchTriggers(4);
-                        break;
-                    case "D4":
-                        SwitchTriggers(4);
-                        break;
-                    // Up
-                    case "D1":
-                        SwitchTriggers(1);
-                        break;
-                    case "D2":
-                        SwitchTriggers(1);
-                        break;
-                    // Down
-                    case "D5":
-                        SwitchTriggers(5);
-                        break;
-                    case "D6":
-                        SwitchTriggers(5);
-                        break;
-                    // B
-                    // Left
-                    case "B7":
-                        SwitchTriggers(4);
-                        break;
-                    case "B8":
-                        SwitchTriggers(4);
-                        break;
-                    // Right
-                    case "B3":
-                        SwitchTriggers(2);
-                        break;
-                    case "B4":
-                        SwitchTriggers(2);
-                        break;
-                    // Up
-                    case "B1":
-                        SwitchTriggers(5);
-                        break;
-                    case "B2":
-                        SwitchTriggers(5);
-                        break;
-                    // Down
-                    case "B5":
-                        SwitchTriggers(0);
-                        break;
-                    case "B6":
-                        SwitchTriggers(0);
-                        break;
-                    // C
-                    // Left
-                    case "C7":
-                        SwitchTriggers(0);
-                        break;
-                    case "C8":
-                        SwitchTriggers(0);
-                        break;
-                    // Right
-                    case "C3":
-                        SwitchTriggers(3);
-                        break;
-                    case "C4":
-                        SwitchTriggers(3);
-                        break;
-                    // Up
-                    case "C1":
-                        SwitchTriggers(1);
-                        break;
-                    case "C2":
-                        SwitchTriggers(1);
-                        break;
-                    // Down
-                    case "C5":
-                        SwitchTriggers(5);
-                        break;
-                    case "C6":
-                        SwitchTriggers(5);
-                        break;
-                    // E
-                    // Left
-                    case "E7":
-                        SwitchTriggers(3);
-                        break;
-                    case "E8":
-                        SwitchTriggers(3);
-                        break;
-                    // Right
-                    case "E3":
-                        SwitchTriggers(0);
-                        break;
-                    case "E4":
-                        SwitchTriggers(0);
-                        break;
-                    // Up
-                    case "E1":
-                        SwitchTriggers(1);
-                        break;
-                    case "E2":
-                        SwitchTriggers(1);
-                        break;
-                    // Down
-                    case "E5":
-                        SwitchTriggers(5);
-                        break;
-                    case "E6":
-                        SwitchTriggers(5);
-                        break;
-                    default:
-                        break;
-                }
+                // A
+                // Left
+                case "A7":
+                    SwitchTriggers(4);
+                    break;
+                case "A8":
+                    SwitchTriggers(4);
+                    break;
+                // Right
+                case "A3":
+                    SwitchTriggers(2);
+                    break;
+                case "A4":
+                    SwitchTriggers(2);
+                    break;
+                // Up
+                case "A1":
+                    SwitchTriggers(1);
+                    break;
+                case "A2":
+                    SwitchTriggers(1);
+                    break;
+                // Down
+                case "A5":
+                    SwitchTriggers(5);
+                    break;
+                case "A6":
+                    SwitchTriggers(5);
+                    break;
+                // F
+                // Left
+                case "F7":
+                    SwitchTriggers(4);
+                    break;
+                case "F8":
+                    SwitchTriggers(4);
+                    break;
+                // Right
+                case "F3":
+                    SwitchTriggers(2);
+                    break;
+                case "F4":
+                    SwitchTriggers(2);
+                    break;
+                // Up
+                case "F1":
+                    SwitchTriggers(0);
+                    break;
+                case "F2":
+                    SwitchTriggers(0);
+                    break;
+                // Down
+                case "F5":
+                    SwitchTriggers(3);
+                    break;
+                case "F6":
+                    SwitchTriggers(3);
+                    break;
+                // D
+                // Left
+                case "D7":
+                    SwitchTriggers(2);
+                    break;
+                case "D8":
+                    SwitchTriggers(2);
+                    break;
+                // Right
+                case "D3":
+                    SwitchTriggers(4);
+                    break;
+                case "D4":
+                    SwitchTriggers(4);
+                    break;
+                // Up
+                case "D1":
+                    SwitchTriggers(1);
+                    break;
+                case "D2":
+                    SwitchTriggers(1);
+                    break;
+                // Down
+                case "D5":
+                    SwitchTriggers(5);
+                    break;
+                case "D6":
+                    SwitchTriggers(5);
+                    break;
+                // B
+                // Left
+                case "B7":
+                    SwitchTriggers(4);
+                    break;
+                case "B8":
+                    SwitchTriggers(4);
+                    break;
+                // Right
+                case "B3":
+                    SwitchTriggers(2);
+                    break;
+                case "B4":
+                    SwitchTriggers(2);
+                    break;
+                // Up
+                case "B1":
+                    SwitchTriggers(5);
+                    break;
+                case "B2":
+                    SwitchTriggers(5);
+                    break;
+                // Down
+                case "B5":
+                    SwitchTriggers(0);
+                    break;
+                case "B6":
+                    SwitchTriggers(0);
+                    break;
+                // C
+                // Left
+                case "C7":
+                    SwitchTriggers(0);
+                    break;
+                case "C8":
+                    SwitchTriggers(0);
+                    break;
+                // Right
+                case "C3":
+                    SwitchTriggers(3);
+                    break;
+                case "C4":
+                    SwitchTriggers(3);
+                    break;
+                // Up
+                case "C1":
+                    SwitchTriggers(1);
+                    break;
+                case "C2":
+                    SwitchTriggers(1);
+                    break;
+                // Down
+                case "C5":
+                    SwitchTriggers(5);
+                    break;
+                case "C6":
+                    SwitchTriggers(5);
+                    break;
+                // E
+                // Left
+                case "E7":
+                    SwitchTriggers(3);
+                    break;
+                case "E8":
+                    SwitchTriggers(3);
+                    break;
+                // Right
+                case "E3":
+                    SwitchTriggers(0);
+                    break;
+                case "E4":
+                    SwitchTriggers(0);
+                    break;
+                // Up
+                case "E1":
+                    SwitchTriggers(1);
+                    break;
+                case "E2":
+                    SwitchTriggers(1);
+                    break;
+                // Down
+                case "E5":
+                    SwitchTriggers(5);
+                    break;
+                case "E6":
+                    SwitchTriggers(5);
+                    break;
+                default:
+                    break;
             }
         }
     }
+
     private void UpdateRotationYplus()
     {
-        cubeRotationManager.rotateY += 90;
-        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, cubeRotationManager.rotateZ);
+        
     }
+
     private void UpdateRotationYminus()
     {
-        cubeRotationManager.rotateY += -90;
-        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, cubeRotationManager.rotateZ);
-    }
+		
+	}
+
     private void UpdateRotationXplus()
     {
-        cubeRotationManager.rotateX += 90;
-        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, cubeRotationManager.rotateZ);
-    }
+		
+	}
     private void UpdateRotationXminus()
     {
-        cubeRotationManager.rotateX += -90;
-        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, cubeRotationManager.rotateZ);
-    }
+		
+	}
     private void UpdateRotationZplus()
     {
-        cubeRotationManager.rotateZ += 90;
-        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, cubeRotationManager.rotateZ);
-    }
+		
+	}
+
     private void UpdateRotationZminus()
     {
-        cubeRotationManager.rotateZ += -90;
-        targetRotation = Quaternion.Euler(cubeRotationManager.rotateX, cubeRotationManager.rotateY, cubeRotationManager.rotateZ);
-    }
+		
+	}
+
     private void ZoomCamera()
     {
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, new Vector3(0.89375f, -6.14f, -29.35f), Time.deltaTime * rotationSpeed);
@@ -1145,45 +1123,6 @@ public class Trigger : MonoBehaviour
         for (int i = 0; i < triggerManager.lastTriggers.Length; i++)
         {
             triggerManager.lastTriggers[i].transform.GetComponent<Collider2D>().enabled = false;
-        }
-    }
-    private void SwapX()
-    {   
-        var tempVar = cubeRotationManager.rotateX;
-
-        if (cubeRotationManager.rotateX % 90 == 0 && cubeRotationManager.rotateX != 0)
-        {
-            UpdateRotationYminus();
-        }
-        else
-        {
-            UpdateRotationZplus();
-        }
-    }
-    private void SwapY()
-    {
-        var tempVar = cubeRotationManager.rotateY;
-
-        if (cubeRotationManager.rotateY % 90 == 0 && cubeRotationManager.rotateY != 0)
-        {
-            UpdateRotationZplus();
-        }
-        else
-        {
-            UpdateRotationXminus();
-        }
-    }
-    private void SwapZ()
-    {
-        var tempVar = cubeRotationManager.rotateZ;
-
-        if (cubeRotationManager.rotateZ % 90 == 0 && cubeRotationManager.rotateZ != 0)
-        {
-            UpdateRotationXplus();
-        }
-        else
-        {
-            UpdateRotationYminus();
         }
     }
 }
