@@ -28,6 +28,8 @@ public class Trigger : MonoBehaviour
     private float initialSize;
     private bool isZooming = false;
 
+    private List<GameObject> coins;
+
     // Player
     private Player player;
 
@@ -36,19 +38,34 @@ public class Trigger : MonoBehaviour
     
     // Managers
     private CubeRotationManager cubeRotationManager;
+    private Collider2D endGame;
     private TilemapManager tilemapManager;
     private TriggerManager triggerManager;
+    private CoinManager coinManager;
+    private KeyManager keyManager;
+    private DoorManager doorManager;
 
     private void Awake()
     {
         if (cubeRotationManager == null)
             cubeRotationManager = cube.GetComponent<CubeRotationManager>();
 
+        if (coinManager == null)
+            coinManager = cube.GetComponent<CoinManager>();
+
+        if (keyManager == null)
+            keyManager = cube.GetComponent<KeyManager>();
+
         if (tilemapManager == null)
             tilemapManager = cube.GetComponent<TilemapManager>();
 
+        if (doorManager == null)
+            doorManager = cube.GetComponent<DoorManager>();
+
         if (triggerManager == null)
             triggerManager = triggers.GetComponent<TriggerManager>();
+
+        endGame = cube.transform.Find($"XJoint/D/Win").GetComponent<Collider2D>();
     }
     
     void Start()
@@ -69,6 +86,7 @@ public class Trigger : MonoBehaviour
             }
         }
         initialSize = mainCamera.orthographicSize; // Запоминание позиции камеры
+
     }
     
     private void FixedUpdate()
@@ -124,7 +142,25 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap = tilemapManager.currentTilemap;
                     tilemapManager.currentTilemap = tilemapManager.sides[4]; // E
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
-                    
+
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
                     break;
@@ -137,6 +173,24 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[4]; // E
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 // Right
                 case "A3":
@@ -148,6 +202,16 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[2]; // C
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
                     break;
                 case "A4":
                     UpdateRotationYplus();
@@ -158,6 +222,16 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[2]; // С
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
                     break;
                 // Up
                 case "A1":
@@ -169,6 +243,24 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[1]; // B
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 case "A2":
                     UpdateRotationXminus();
@@ -179,6 +271,25 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[1]; // B
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = true;
+
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 // Down
                 case "A5":
@@ -190,6 +301,16 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
 
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
@@ -203,6 +324,16 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
 
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
@@ -219,6 +350,24 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
 
+
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = true;
+
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
                     break;
@@ -233,6 +382,24 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
 
+
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
                     break;
@@ -246,6 +413,17 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[2]; // С
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 case "F4":
                     UpdateRotationZminus();
@@ -256,6 +434,16 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[2]; // С
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 // Up
                 case "F1":
@@ -267,6 +455,16 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
 
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
@@ -280,6 +478,17 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
 
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
@@ -295,8 +504,25 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
 
-                    tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
-                    tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
+                    endGame.enabled = true;
+
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 case "F6":
                     UpdateRotationXplus();
@@ -308,8 +534,26 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
 
+                    endGame.enabled = true;
+
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = true;
+
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
+
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
                     break;
                 // D
                 // Left
@@ -322,6 +566,25 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[2]; // C
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    endGame.enabled = false;
+
                     break;
                 case "D8":
                     UpdateRotationYminus();
@@ -332,6 +595,27 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[2]; // C
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    endGame.enabled = false;
+
                     break;
                 // Right
                 case "D3":
@@ -343,6 +627,34 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[4]; // E
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    endGame.enabled = false;
+
                     break;
                 case "D4":
                     UpdateRotationYplus();
@@ -353,6 +665,34 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[4]; // E
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    endGame.enabled = false;
+
                     break;
                 // Up
                 case "D1":
@@ -364,6 +704,34 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[1]; // B
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    endGame.enabled = false;
+
                     break;
                 case "D2":
                     UpdateRotationXplus();
@@ -374,6 +742,33 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[1]; // B
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    endGame.enabled = false;
+
                     break;
                 // Down
                 case "D5":
@@ -385,6 +780,23 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    endGame.enabled = false;
+
                     break;
                 case "D6":
                     UpdateRotationXminus();
@@ -395,6 +807,24 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+                    endGame.enabled = false;
+
                     break;
                 // B
                 // Left
@@ -407,6 +837,30 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[4]; // E
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = false;
+
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 case "B8":
                     UpdateRotationZminus();
@@ -417,6 +871,28 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[4]; // E
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 // Right
                 case "B3":
@@ -428,6 +904,25 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[2]; // C
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
+
                     break;
                 case "B4":
                     UpdateRotationZplus();
@@ -438,6 +933,24 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[2]; // C
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
                     break;
                 // Up
                 case "B1":
@@ -446,9 +959,36 @@ public class Trigger : MonoBehaviour
 
                     Debug.Log("Верхний триггер B");
                     tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[3]; // F
+                    tilemapManager.currentTilemap = tilemapManager.sides[3]; // D
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    endGame.enabled = true;
+
                     break;
                 case "B2":
                     UpdateRotationXminus();
@@ -456,9 +996,36 @@ public class Trigger : MonoBehaviour
 
                     Debug.Log("Верхний триггер B");
                     tilemapManager.lastTilemap = tilemapManager.currentTilemap;
-                    tilemapManager.currentTilemap = tilemapManager.sides[3]; // F
+                    tilemapManager.currentTilemap = tilemapManager.sides[3]; // D
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                   
+                    endGame.enabled = true;
+
                     break;
                 // Down
                 case "B5":
@@ -470,6 +1037,24 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
                     break;
                 case "B6":
                     UpdateRotationXplus();
@@ -480,6 +1065,25 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
                     break;
                 // C
                 // Left
@@ -492,6 +1096,17 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+
                     break;
                 case "C8":
                     UpdateRotationYminus();
@@ -502,6 +1117,16 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 // Right
                 case "C3":
@@ -513,6 +1138,26 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[3]; // D
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    endGame.enabled = true;
+
                     break;
                 case "C4":
                     UpdateRotationYplus();
@@ -523,6 +1168,26 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[3]; // D
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = true;
+
+
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    endGame.enabled = true;
+
                     break;
                 // Up
                 case "C1":
@@ -534,6 +1199,25 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[1]; // B
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = true;
+
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 case "C2":
                     UpdateRotationZminus();
@@ -544,6 +1228,23 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[1]; // B
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 // Down
                 case "C5":
@@ -554,6 +1255,16 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap = tilemapManager.currentTilemap;
                     tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     //tilemapManager.sides[5].transform.rotation = Quaternion.Euler(0, 90, 0);
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
@@ -566,6 +1277,16 @@ public class Trigger : MonoBehaviour
                     tilemapManager.lastTilemap = tilemapManager.currentTilemap;
                     tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsC.Length; i++)
+                    {
+                        coinManager.coinsC[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     //tilemapManager.sides[5].transform.rotation = Quaternion.Euler(0, 90, 0);
                     //tilemapManager.currentTilemap.transform.GetComponent<Rigidbody2D>().simulated = true;
                     //tilemapManager.lastTilemap.transform.GetComponent<Rigidbody2D>().simulated = false;
@@ -581,6 +1302,32 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[3]; // D
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    endGame.enabled = true;
+
                     break;
                 case "E8":
                     UpdateRotationYminus();
@@ -591,6 +1338,33 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[3]; // D
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+                   
+                    for (int i = 0; i < coinManager.coinsD.Length; i++)
+                    {
+                        coinManager.coinsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    keyManager.keysD[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysD[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    for (int i = 0; i < doorManager.doorsD.Length; i++)
+                    {
+                        doorManager.doorsD[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
+                    endGame.enabled = true;
+
                     break;
                 // Right
                 case "E3":
@@ -602,6 +1376,23 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
                     break;
                 case "E4":
                     UpdateRotationYplus();
@@ -612,6 +1403,23 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[0]; // A
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsA.Length; i++)
+                    {
+                        coinManager.coinsA[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
                     break;
                 // Up
                 case "E1":
@@ -623,6 +1431,30 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[1]; // B
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 case "E2":
                     UpdateRotationZplus();
@@ -633,6 +1465,30 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[1]; // B
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsB.Length; i++)
+                    {
+                        coinManager.coinsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysB[0].transform.GetComponent<Collider2D>().enabled = true;
+                    keyManager.keysB[1].transform.GetComponent<Collider2D>().enabled = true;
+
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+                    for (int i = 0; i < doorManager.doorsB.Length; i++)
+                    {
+                        doorManager.doorsB[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+
                     break;
                 // Down
                 case "E5":
@@ -644,6 +1500,23 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
                     break;
                 case "E6":
                     UpdateRotationZminus();
@@ -654,6 +1527,23 @@ public class Trigger : MonoBehaviour
                     tilemapManager.currentTilemap = tilemapManager.sides[5]; // F
                     tilemapManager.currentTilemap.transform.GetComponent<Collider2D>().enabled = true;
                     tilemapManager.lastTilemap.transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < coinManager.coinsF.Length; i++)
+                    {
+                        coinManager.coinsF[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    for (int i = 0; i < coinManager.coinsE.Length; i++)
+                    {
+                        coinManager.coinsE[i].transform.GetComponent<Collider2D>().enabled = true;
+                    }
+                    keyManager.keysE[0].transform.GetComponent<Collider2D>().enabled = false;
+                    keyManager.keysE[1].transform.GetComponent<Collider2D>().enabled = false;
+
+                    for (int i = 0; i < doorManager.doorsE.Length; i++)
+                    {
+                        doorManager.doorsE[i].transform.GetComponent<Collider2D>().enabled = false;
+                    }
+
                     break;
                 default:
                     break;

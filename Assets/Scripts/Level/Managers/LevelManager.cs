@@ -12,7 +12,6 @@ public class LevelManager : MonoBehaviour
 
     public List<Coins> coinsList;
     public List<Weapon> weaponList;
-    public List<Keys> keysList;
     
     private LevelProgress progress;
 
@@ -31,12 +30,6 @@ public class LevelManager : MonoBehaviour
         {
             weapon.SetLevelManager(this);
         }
-
-        keysList = FindObjectsOfType<Keys>().ToList();
-        foreach (Keys key in keysList)
-        {
-            key.SetLevelManager(this);
-        }
     }
 
     public void UpdateScore(int score)
@@ -49,10 +42,5 @@ public class LevelManager : MonoBehaviour
     {
         progress.LevelWeapon += 1;
         WeaponText.text = $"Weapon: {progress.LevelWeapon}";
-    }
-    public void UpdateKeys()
-    {
-        progress.LevelKeys += 1;
-        WeaponText.text = $"Keys: {progress.LevelKeys}";
     }
 }

@@ -5,26 +5,48 @@ using UnityEngine;
 public class OpenTheDoor : MonoBehaviour
 {
     [SerializeField] private LevelManager levelManager;
-    //[SerializeField] private Player player;
+    
+    private Keys keys;
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.gameObject.GetComponent<Player>() != null)
-    //    {
-    //        Debug.Log("Collision detected with: " + collision.gameObject.name); // Отладка
-    //        if (levelManager.keysList.Count > 0)
-    //        {
-    //            gameObject.SetActive(false);
-    //        }
-    //    }
-    //}
+    private void Start()
+    {
+        if (keys == null)
+            keys = transform.GetComponent<Keys>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Player>(out var player))
+        if (collision.CompareTag("Door"))
         {
-            gameObject.SetActive(false);
+            switch (collision.name)
+            {
+                case "red door":
+                    if (keys.redKey)
+                        collision.gameObject.SetActive(false);
+                    break;
+                case "blue door":
+                    if (keys.blueKey)
+                        collision.gameObject.SetActive(false);
+                    break;
+                case "purple door":
+                    if (keys.purpleKey)
+                        collision.gameObject.SetActive(false);
+                    break;
+                case "green door":
+                    if (keys.greenKey)
+                        collision.gameObject.SetActive(false);
+                    break;
+                case "white door":
+                    if (keys.whiteKey)
+                        collision.gameObject.SetActive(false);
+                    break;
+                case "yellow door":
+                    if (keys.yelllowKey)
+                        collision.gameObject.SetActive(false);
+                    break;
+                default:
+                    break;
+            }
         }
     }
-
 }

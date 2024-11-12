@@ -8,6 +8,8 @@ TagManager:
   - Right
   - Down
   - Up
+  - Key
+  - Door
   layers:
   - Default
   - TransparentFX
